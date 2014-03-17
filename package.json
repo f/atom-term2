@@ -1,7 +1,7 @@
 {
   "name": "term",
   "main": "./index",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Open Terminal tabs in Atom.",
   "activationEvents": [
     "term:open"
