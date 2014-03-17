@@ -12,14 +12,12 @@ module.exports = {
       }
     },
     openTerm: function () {
-      console.log('DATA', arguments);
       atom.workspace.open('term://', {
         split:'right',
         searchAllPanes: true
       }); //.done
     },
     handleUrl: function (urlToOpen) {
-      console.log('url!', arguments);
       var parsedUrl = url.parse(urlToOpen);
       if (parsedUrl.protocol === 'term:') {
         var termView = new TermView();
