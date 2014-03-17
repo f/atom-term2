@@ -6,7 +6,7 @@
   "activationEvents": [
     "term:open"
   ],
-  "repository": "https://github.com/tjmehta/term",
+  "repository": "https://github.com/tjmehta/atom-term",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
