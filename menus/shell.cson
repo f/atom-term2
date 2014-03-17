@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+# 'context-menu':
+#   '.overlayer':
+#       'Open terminal here': 'term:open'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'term'
+      'submenu': [
+        { 'label': 'Open New Terminal', 'command': 'term:open' }
+      ]
+    ]
+  }
+]
