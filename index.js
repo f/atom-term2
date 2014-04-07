@@ -5,26 +5,26 @@ module.exports = {
     termViews: [],
     activate: function (state) {
       this.state = state;
-      atom.workspaceView.command('term:open', this.openTerm.bind(this));
-      atom.workspace.registerOpener(this.handleUrl.bind(this));
+      var self = this;
+      ['up', 'right', 'down', 'left'].forEach(function (direction) {
+        atom.workspaceView.command('term:open-split-'+direction, self.splitTerm.bind(self, direction));
+      });
       if (state.termViews) {
-        // restore
+        // TODO: restore
       }
     },
-    openTerm: function () {
-      atom.workspace.open('term://', {
-        split:'right',
-        searchAllPanes: true
-      }); //.done
+    createTermView: function () {
+      var termView = new TermView();
+      termView.on('remove', this.handleRemoveTerm.bind(this));
+      this.termViews.push(termView);
+      return termView;
     },
-    handleUrl: function (urlToOpen) {
-      var parsedUrl = url.parse(urlToOpen);
-      if (parsedUrl.protocol === 'term:') {
-        var termView = new TermView();
-        termView.on('remove', this.handleRemoveTerm.bind(this));
-        this.termViews.push(termView);
-        return termView;
-      }
+    splitTerm: function (direction) {
+      var termView = this.createTermView();
+      direction = capitalize(direction);
+      atom.workspace.getActivePane()['split'+direction]({
+        items: [termView]
+      });
     },
     handleRemoveTerm: function (termView) {
       var termViews = this.termViews;
@@ -44,3 +44,7 @@ module.exports = {
       };
     }
 };
+
+function capitalize (str) {
+  return str[0].toUpperCase() + str.slice(1).toLowerCase();
+}

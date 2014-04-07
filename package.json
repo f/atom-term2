@@ -1,10 +1,13 @@
 {
   "name": "term",
   "main": "./index",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Open Terminal tabs in Atom.",
   "activationEvents": [
-    "term:open"
+    "term:open-split-left",
+    "term:open-split-up",
+    "term:open-split-right",
+    "term:open-split-down"
   ],
   "repository": "https://github.com/tjmehta/atom-term",
   "license": "MIT",
