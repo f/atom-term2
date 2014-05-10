@@ -3,6 +3,9 @@ var TermView = require('./lib/TermView');
 
 module.exports = {
     termViews: [],
+    configDefaults: {
+      autoRunCommand: null
+    },
     activate: function (state) {
       this.state = state;
       var self = this;
@@ -14,7 +17,10 @@ module.exports = {
       }
     },
     createTermView: function () {
-      var termView = new TermView();
+      var opts = {
+        runCommand: atom.config.get('term.autoRunCommand')
+      };
+      var termView = new TermView(opts);
       termView.on('remove', this.handleRemoveTerm.bind(this));
       this.termViews.push(termView);
       return termView;
