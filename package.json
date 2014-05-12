@@ -1,7 +1,7 @@
 {
   "name": "term2",
   "main": "./index",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Open Terminal tabs in Atom. Fork of Term package",
   "activationEvents": [
     "term2:open-split-left",
