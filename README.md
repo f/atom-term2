@@ -11,3 +11,7 @@ It adds startup command to run at startup.
 ![Term Startup](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term2.png)
 
 [1]: http://atom.io/packages/term
+
+## Key Bindings: `CTRL + ALT + (Direction: Left, Right, Up, Down)`
+
+Now you can use simply `CTRL + ALT + Left`, `CTRL + ALT + Right`, `CTRL + ALT + Up` or `CTRL + ALT + Down`.
