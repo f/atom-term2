@@ -8,4 +8,4 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 '.workspace':
-  'ctrl-alt-t': 'term:open-split-right'
+  'ctrl-alt-t': 'term2:open-split-right'
