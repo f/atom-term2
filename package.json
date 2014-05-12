@@ -1,15 +1,15 @@
 {
-  "name": "term",
+  "name": "term2",
   "main": "./index",
   "version": "0.2.1",
-  "description": "Open Terminal tabs in Atom.",
+  "description": "Open Terminal tabs in Atom. Fork of Term package",
   "activationEvents": [
     "term:open-split-left",
     "term:open-split-up",
     "term:open-split-right",
     "term:open-split-down"
   ],
-  "repository": "https://github.com/tjmehta/atom-term",
+  "repository": "https://github.com/webBoxio/atom-term2",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
