@@ -2,6 +2,10 @@
 
 Shell sessions within atom editor. It's a fork of "[Term][1]" package.
 
+```bash
+apm install term2
+```
+
 ![Term](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term2-1.png)
 
 ## Startup Command
