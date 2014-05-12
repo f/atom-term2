@@ -10,7 +10,7 @@ module.exports = {
       this.state = state;
       var self = this;
       ['up', 'right', 'down', 'left'].forEach(function (direction) {
-        atom.workspaceView.command('term:open-split-'+direction, self.splitTerm.bind(self, direction));
+        atom.workspaceView.command('term2:open-split-'+direction, self.splitTerm.bind(self, direction));
       });
       if (state.termViews) {
         // TODO: restore
@@ -18,7 +18,7 @@ module.exports = {
     },
     createTermView: function () {
       var opts = {
-        runCommand: atom.config.get('term.autoRunCommand')
+        runCommand: atom.config.get('term2.autoRunCommand')
       };
       var termView = new TermView(opts);
       termView.on('remove', this.handleRemoveTerm.bind(this));

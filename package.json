@@ -4,10 +4,10 @@
   "version": "0.3.0",
   "description": "Open Terminal tabs in Atom. Fork of Term package",
   "activationEvents": [
-    "term:open-split-left",
-    "term:open-split-up",
-    "term:open-split-right",
-    "term:open-split-down"
+    "term2:open-split-left",
+    "term2:open-split-up",
+    "term2:open-split-right",
+    "term2:open-split-down"
   ],
   "repository": "https://github.com/webBoxio/atom-term2",
   "license": "MIT",
