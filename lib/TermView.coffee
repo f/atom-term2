@@ -1,6 +1,7 @@
 util       = require 'util'
 path       = require 'path'
 os         = require 'os'
+fs         = require 'fs'
 
 debounce   = require 'debounce'
 ptyjs      = require 'pty.js'
@@ -30,17 +31,19 @@ class TermView extends View
     {cwd, shell, shellArguments, runCommand} = @opts
     args = shellArguments.split /\s+/g
     @pty = pty = ptyjs.spawn shell, args, {
-      name: 'xterm-color'
+      name: if fs.existsSync('/usr/share/terminfo/x/xterm-256color') then 'xterm-256color' else 'xterm'
       env : process.env
       cwd, cols, rows
     }
-    @term = term = new Terminal {useStyle: yes, screenKeys: yes, cols, rows}
-    term.on "data", pty.write.bind pty
-    term.open this[0]
+    @term = term = new Terminal {useStyle: yes, screenKeys: no, cols, rows}
+    term.refresh = require('./termjs-refresh-fix').bind term
+    term.end = => @destroy()
+
+    term.on "data", (data)=> pty.write data
+    term.open this.get(0)
 
     pty.write "#{runCommand}#{os.EOL}" if runCommand
     pty.pipe term
-    term.end = @destroy.bind this
     term.focus()
 
     @attachEvents()
@@ -53,7 +56,7 @@ class TermView extends View
     @attachResizeEvents()
 
   attachResizeEvents: ->
-    # setTimeout (=> @resizeToPane()), 10
+    setTimeout (=> @resizeToPane()), 10
     @on "focus", @resizeToPane
     @resizeInterval = setInterval @resizeToPane.bind(this), 50
     @resizeHandlers = [debounce @resizeToPane.bind(this), 10]
