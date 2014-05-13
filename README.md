@@ -8,6 +8,12 @@ apm install term2
 
 ![Term](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term2-1.png)
 
+## A Complete Terminal
+
+You can run **Vim, Emacs, Htop, etc.** in your Atom.
+
+![Vim, Emacs and HTop](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term3.png)
+
 ## Startup Command
 
 It adds startup command to run at startup.
