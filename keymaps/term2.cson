@@ -12,3 +12,8 @@
   'ctrl-alt-left': 'term2:open-split-left'
   'ctrl-alt-up': 'term2:open-split-up'
   'ctrl-alt-down': 'term2:open-split-down'
+
+  'cmd-k t right': 'term2:open-split-right'
+  'cmd-k t left': 'term2:open-split-left'
+  'cmd-k t up': 'term2:open-split-up'
+  'cmd-k t down': 'term2:open-split-down'
