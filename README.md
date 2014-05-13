@@ -22,6 +22,11 @@ You can define your bash arguments. It's `--init-file ~/.bash_profile` by defaul
 
 ## Key Bindings:
 
-**`CTRL + ALT + (Direction: Left, Right, Up, Down)`**
+**`CTRL + ALT + <Direction>`**
+
+and you can also use **`CMD + K T <Direction>`**
+
+`CMD + K <Direction>` is the default key binding to open split windows. If you just add `T` after
+`K` press, you'll open a window.
 
 Now you can use simply `CTRL + ALT + Left`, `CTRL + ALT + Right`, `CTRL + ALT + Up` or `CTRL + ALT + Down`.
