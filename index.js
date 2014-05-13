@@ -4,7 +4,8 @@ var TermView = require('./lib/TermView');
 module.exports = {
     termViews: [],
     configDefaults: {
-      autoRunCommand: null
+      autoRunCommand: null,
+      shellArguments: '--init-file ~/.bash_profile'
     },
     activate: function (state) {
       this.state = state;
@@ -18,7 +19,8 @@ module.exports = {
     },
     createTermView: function () {
       var opts = {
-        runCommand: atom.config.get('term2.autoRunCommand')
+        runCommand: atom.config.get('term2.autoRunCommand'),
+        shellArguments: atom.config.get('term2.shellArguments')
       };
       var termView = new TermView(opts);
       termView.on('remove', this.handleRemoveTerm.bind(this));

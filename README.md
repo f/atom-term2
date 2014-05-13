@@ -14,6 +14,10 @@ It adds startup command to run at startup.
 
 ![Term Startup](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term2.png)
 
+## Shell Arguments
+
+You can define your bash arguments. It's `--init-file ~/.bash_profile` by default.
+
 [1]: http://atom.io/packages/term
 
 ## Key Bindings:
