@@ -4,6 +4,7 @@
   "version": "0.6.3",
   "description": "Open Terminal tabs in Atom. Fork of Term package",
   "activationEvents": [
+    "term2:open",
     "term2:open-split-left",
     "term2:open-split-up",
     "term2:open-split-right",

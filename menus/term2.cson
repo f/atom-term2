@@ -9,6 +9,7 @@
     'submenu': [
       'label': 'Term 2'
       'submenu': [
+        { 'label': 'Open New Terminal in New Tab', 'command': 'term2:open' },
         { 'label': 'Open New Terminal in Right Pane', 'command': 'term2:open-split-right' },
         { 'label': 'Open New Terminal in Bottom Pane', 'command': 'term2:open-split-down' },
         { 'label': 'Open New Terminal in Top Pane', 'command': 'term2:open-split-up' },

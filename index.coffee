@@ -5,6 +5,8 @@ capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 module.exports =
 
     termViews: []
+    # splits: {}
+    # splitCounts: {up: 0, down: 0, left: 0, right: 0}
 
     configDefaults:
       autoRunCommand: null
@@ -14,6 +16,8 @@ module.exports =
 
       ['up', 'right', 'down', 'left'].forEach (direction)=>
         atom.workspaceView.command "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
+
+      atom.workspaceView.command "term2:open", @newTerm.bind(this)
 
     createTermView:->
       opts =
@@ -29,7 +33,19 @@ module.exports =
     splitTerm: (direction)->
       termView = @createTermView()
       direction = capitalize direction
+      # if @splits[direction] and @splits[direction].items.length > 0
+      #   pane = @splits[direction]
+      #   item = pane.addItem termView
+      #   pane.activateItem item
+      # else
+      #   @splits[direction] = atom.workspace.getActivePane()["split#{direction}"] items: [termView]
       atom.workspace.getActivePane()["split#{direction}"] items: [termView]
+
+    newTerm: ->
+      termView = @createTermView()
+      pane = atom.workspace.getActivePane()
+      item = pane.addItem termView
+      pane.activateItem item
 
     handleRemoveTerm: (termView)->
       {termViews} = this

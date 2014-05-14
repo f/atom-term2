@@ -28,6 +28,8 @@ You can define your bash arguments. It's `--init-file ~/.bash_profile` by defaul
 
 ## Key Bindings:
 
+**`CTRL + ALT + T`** Opens new tab.
+
 **`CTRL + ALT + <Direction>`**
 
 and you can also use **`CMD + K T <Direction>`**
