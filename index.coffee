@@ -5,12 +5,12 @@ capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 module.exports =
 
     termViews: []
-    # splits: {}
-    # splitCounts: {up: 0, down: 0, left: 0, right: 0}
+    splits: {}
 
     configDefaults:
       autoRunCommand: null
       shellArguments: '--init-file ~/.bash_profile'
+      openPanesInSameSplit: no
 
     activate: (@state)->
 
@@ -31,15 +31,19 @@ module.exports =
       termView
 
     splitTerm: (direction)->
+      openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
       termView = @createTermView()
       direction = capitalize direction
-      # if @splits[direction] and @splits[direction].items.length > 0
-      #   pane = @splits[direction]
-      #   item = pane.addItem termView
-      #   pane.activateItem item
-      # else
-      #   @splits[direction] = atom.workspace.getActivePane()["split#{direction}"] items: [termView]
-      atom.workspace.getActivePane()["split#{direction}"] items: [termView]
+
+      if openPanesInSameSplit
+        if @splits[direction] and @splits[direction].items.length > 0
+          pane = @splits[direction]
+          item = pane.addItem termView
+          pane.activateItem item
+        else
+          @splits[direction] = atom.workspace.getActivePane()["split#{direction}"] items: [termView]
+      else
+        atom.workspace.getActivePane()["split#{direction}"] items: [termView]
 
     newTerm: ->
       termView = @createTermView()
