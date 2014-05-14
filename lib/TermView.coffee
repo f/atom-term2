@@ -87,7 +87,6 @@ class TermView extends View
     cols = @width() / colSize | 0
     rows = @height() / rowSize | 0
 
-    console.log cols, rows
     {cols, rows}
 
   destroy: ->
