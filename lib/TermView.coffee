@@ -27,6 +27,7 @@ class TermView extends View
     super
 
   initialize: (@state)->
+    console.log "initializing"
     {cols, rows} = @getDimensions()
     {cwd, shell, shellArguments, runCommand} = @opts
     args = shellArguments.split /\s+/g
@@ -72,6 +73,7 @@ class TermView extends View
 
   resizeToPane: ->
     {cols, rows} = @getDimensions()
+    return unless cols > 0 and rows > 0
     return unless @term
     return if @term.rows is rows and @term.cols is cols
 
@@ -85,6 +87,7 @@ class TermView extends View
     cols = @width() / colSize | 0
     rows = @height() / rowSize | 0
 
+    console.log cols, rows
     {cols, rows}
 
   destroy: ->
