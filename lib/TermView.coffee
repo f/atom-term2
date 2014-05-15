@@ -55,7 +55,6 @@ class TermView extends View
 
     term.on "data", (data)=> pty.write data
     term.open this.get(0)
-    term
     pty.write "#{runCommand}#{os.EOL}" if runCommand
     pty.pipe term
     term.focus()
