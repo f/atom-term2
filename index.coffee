@@ -82,8 +82,9 @@ module.exports =
       direction = capitalize direction
 
       splitter = =>
-        activePane.termSplits[direction] = activePane["split#{direction}"] items: [termView]
-        @focusedTerminal = termView
+        pane = activePane["split#{direction}"] items: [termView]
+        activePane.termSplits[direction] = pane
+        @focusedTerminal = [pane, pane.items[0]]
 
       activePane = atom.workspace.getActivePane()
       activePane.termSplits or= {}
@@ -92,7 +93,7 @@ module.exports =
           pane = activePane.termSplits[direction]
           item = pane.addItem termView
           pane.activateItem item
-          @focusedTerminal = termView
+          @focusedTerminal = [pane, item]
         else
           splitter()
       else
@@ -113,10 +114,14 @@ module.exports =
           editor.getSelectedText()
 
       if stream and @focusedTerminal
-        @focusedTerminal.focus()
-        @focusedTerminal.click()
-        @focusedTerminal.term?.focus()
-        @focusedTerminal.pty?.write stream.trim()
+        if Array.isArray @focusedTerminal
+          [pane, item] = @focusedTerminal
+          pane.activateItem item
+        else
+          item = @focusedTerminal
+
+        item.pty.write stream.trim()
+        item.term.focus()
 
     handleRemoveTerm: (termView)->
       @termViews.splice @termViews.indexOf(termView), 1
