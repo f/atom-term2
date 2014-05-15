@@ -55,4 +55,13 @@ Template ({{ bashName }})
   - You can **pipe the text and paths** to the Terminal sessions.
   - Paste from clipboard
 
+# Contributors
+
+  - [tjmehta][2] *(Owner of the original Term Package)*
+  - [@Azerothian][3]
+  - [@abe33][4]
+
 [1]: http://atom.io/packages/term
+[2]: https://github.com/tjmehta
+[3]: https://github.com/Azerothian
+[4]: https://github.com/abe33
