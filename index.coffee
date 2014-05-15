@@ -8,8 +8,28 @@ module.exports =
     termViews: []
 
     configDefaults:
-      titleTemplate: "Terminal ({{ bashName }})"
       autoRunCommand: null
+      titleTemplate: "Terminal ({{ bashName }})"
+      colors:
+        normalBlack : '#2e3436'
+        normalRed   : '#cc0000'
+        normalGreen : '#4e9a06'
+        normalYellow: '#c4a000'
+        normalBlue  : '#3465a4'
+        normalPurple: '#75507b'
+        normalCyan  : '#06989a'
+        normalWhite : '#d3d7cf'
+        brightBlack : '#555753'
+        brightRed   : '#ef2929'
+        brightGreen : '#8ae234'
+        brightYellow: '#fce94f'
+        brightBlue  : '#729fcf'
+        brightPurple: '#ad7fa8'
+        brightCyan  : '#34e2e2'
+        brightWhite : '#eeeeec'
+
+      scrollback: 1000
+      cursorBlink: yes
       shellArguments: do ({SHELL, HOME}=process.env)->
         switch path.basename SHELL.toLowerCase()
           when 'bash' then "--init-file #{path.join HOME, '.bash_profile'}"
@@ -24,11 +44,27 @@ module.exports =
 
       atom.workspaceView.command "term2:open", @newTerm.bind(this)
 
+    getColors: ->
+      {colors: {
+        normalBlack, normalRed, normalGreen, normalYellow
+        normalBlue, normalPurple, normalCyan, normalWhite
+        brightBlack, brightRed, brightGreen, brightYellow
+        brightBlue, brightPurple, brightCyan, brightWhite
+      }} = atom.config.getSettings().term2
+      [
+        normalBlack, normalRed, normalGreen, normalYellow
+        normalBlue, normalPurple, normalCyan, normalWhite
+        brightBlack, brightRed, brightGreen, brightYellow
+        brightBlue, brightPurple, brightCyan, brightWhite
+      ]
+
     createTermView:->
       opts =
-        runCommand: atom.config.get 'term2.autoRunCommand'
+        runCommand    : atom.config.get 'term2.autoRunCommand'
         shellArguments: atom.config.get 'term2.shellArguments'
-        titleTemplate: atom.config.get 'term2.titleTemplate'
+        titleTemplate : atom.config.get 'term2.titleTemplate'
+        cursorBlink   : atom.config.get 'term2.cursorBlink'
+        colors        : @getColors()
 
       termView = new TermView opts
       termView.on 'remove', @handleRemoveTerm.bind this

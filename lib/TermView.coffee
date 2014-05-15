@@ -35,14 +35,21 @@ class TermView extends View
 
   initialize: (@state)->
     {cols, rows} = @getDimensions()
-    {cwd, shell, shellArguments, runCommand} = @opts
+    {cwd, shell, shellArguments, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg)-> arg
     @pty = pty = ptyjs.spawn shell, args, {
       name: if fs.existsSync('/usr/share/terminfo/x/xterm-256color') then 'xterm-256color' else 'xterm'
       env : process.env
       cwd, cols, rows
     }
-    @term = term = new Terminal {useStyle: yes, screenKeys: no, cols, rows}
+    colorsArray = (colorCode for colorName, colorCode of colors)
+    @term = term = new Terminal {
+      useStyle: yes
+      screenKeys: no
+      colors: colorsArray
+      cursorBlink, scrollback, cols, rows
+    }
+
     term.refresh = require('./termjs-refresh-fix').bind term
     term.end = => @destroy()
 
