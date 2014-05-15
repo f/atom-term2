@@ -16,7 +16,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "term.js": "0.0.3",
+    "atom-term.js": "0.0.51",
     "pty.js": "^0.2.4",
     "debounce": "0.0.3",
     "keypather": "^1.3.2"
