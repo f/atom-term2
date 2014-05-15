@@ -112,9 +112,11 @@ module.exports =
         when 'selection'
           editor.getSelectedText()
 
-      if stream
+      if stream and @focusedTerminal
         @focusedTerminal.focus()
-        @focusedTerminal?.pty?.write stream.trim()
+        @focusedTerminal.click()
+        @focusedTerminal.term?.focus()
+        @focusedTerminal.pty?.write stream.trim()
 
     handleRemoveTerm: (termView)->
       @termViews.splice @termViews.indexOf(termView), 1
