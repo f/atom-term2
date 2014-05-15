@@ -1,7 +1,7 @@
 {
   "name": "term2",
   "main": "./index",
-  "version": "0.8.2",
+  "version": "0.8.4",
   "description": "You can run shell sessions within Atom Editor using Term 2 package. You can run **Vim, Emacs, Htop, etc.** in your Atom. It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power of Atom Package environment.",
   "activationEvents": [
     "term2:open",
@@ -16,7 +16,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "term.js": "0.0.3",
+    "atom-term.js": "0.0.51",
     "pty.js": "^0.2.4",
     "debounce": "0.0.3",
     "keypather": "^1.3.2"

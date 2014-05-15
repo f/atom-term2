@@ -5,7 +5,7 @@ fs         = require 'fs'
 
 debounce   = require 'debounce'
 ptyjs      = require 'pty.js'
-Terminal   = require 'term.js'
+Terminal   = require 'atom-term.js'
 
 keypather  = do require 'keypather'
 
@@ -50,7 +50,6 @@ class TermView extends View
       cursorBlink, scrollback, cols, rows
     }
 
-    term.refresh = require('./termjs-refresh-fix').bind term
     term.end = => @destroy()
 
     term.on "data", (data)=> pty.write data

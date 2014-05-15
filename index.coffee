@@ -6,6 +6,7 @@ capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 module.exports =
 
     termViews: []
+    focusedTerminal: off
 
     configDefaults:
       autoRunCommand: null
@@ -43,6 +44,8 @@ module.exports =
         atom.workspaceView.command "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
 
       atom.workspaceView.command "term2:open", @newTerm.bind(this)
+      atom.workspaceView.command "term2:pipe-path", @pipeTerm.bind(this, 'path')
+      atom.workspaceView.command "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
 
     getColors: ->
       {colors: {
@@ -75,10 +78,12 @@ module.exports =
     splitTerm: (direction)->
       openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
       termView = @createTermView()
+      termView.on "click", => @focusedTerminal = termView
       direction = capitalize direction
 
-      splitter = ->
+      splitter = =>
         activePane.termSplits[direction] = activePane["split#{direction}"] items: [termView]
+        @focusedTerminal = termView
 
       activePane = atom.workspace.getActivePane()
       activePane.termSplits or= {}
@@ -87,6 +92,7 @@ module.exports =
           pane = activePane.termSplits[direction]
           item = pane.addItem termView
           pane.activateItem item
+          @focusedTerminal = termView
         else
           splitter()
       else
@@ -97,6 +103,18 @@ module.exports =
       pane = atom.workspace.getActivePane()
       item = pane.addItem termView
       pane.activateItem item
+
+    pipeTerm: (action)->
+      editor = atom.workspace.getActiveEditor()
+      stream = switch action
+        when 'path'
+          editor.getBuffer().file.path
+        when 'selection'
+          editor.getSelectedText()
+
+      if stream
+        @focusedTerminal.focus()
+        @focusedTerminal?.pty?.write stream.trim()
 
     handleRemoveTerm: (termView)->
       @termViews.splice @termViews.indexOf(termView), 1
