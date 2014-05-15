@@ -9,6 +9,7 @@ module.exports =
     splits: {}
 
     configDefaults:
+      titleTemplate: "Terminal ({{ bashName }})"
       autoRunCommand: null
       shellArguments: do ({SHELL, HOME}=process.env)->
         switch path.basename SHELL.toLowerCase()
@@ -28,6 +29,7 @@ module.exports =
       opts =
         runCommand: atom.config.get 'term2.autoRunCommand'
         shellArguments: atom.config.get 'term2.shellArguments'
+        titleTemplate: atom.config.get 'term2.titleTemplate'
 
       termView = new TermView opts
       termView.on 'remove', @handleRemoveTerm.bind this

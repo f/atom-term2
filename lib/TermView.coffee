@@ -13,6 +13,13 @@ keypather  = do require 'keypather'
 
 last = (str)-> str[str.length-1]
 
+renderTemplate = (template, data)->
+  vars = Object.keys data
+  vars.reduce (_template, key)->
+    _template.split(///\{\{\s*#{key}\s*\}\}///)
+      .join data[key]
+  , template.toString()
+
 class TermView extends View
 
   @content: ->
@@ -49,7 +56,16 @@ class TermView extends View
     @attachEvents()
     @resizeToPane()
 
-  getTitle: -> "Terminal (#{last @opts.shell.split '/'})"
+  titleVars: ->
+    bashName: last @opts.shell.split '/'
+    hostName: os.hostname()
+    platform: process.platform
+    home    : process.env.HOME
+
+  getTitle: ->
+    @vars = @titleVars()
+    titleTemplate = @opts.titleTemplate or "({{ bashName }})"
+    renderTemplate titleTemplate, @vars
 
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this

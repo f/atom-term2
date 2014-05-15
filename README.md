@@ -38,3 +38,14 @@ and you can also use **`CMD + K T <Direction>`**
 `K` press, you'll open a window.
 
 Now you can use simply `CTRL + ALT + Left`, `CTRL + ALT + Right`, `CTRL + ALT + Up` or `CTRL + ALT + Down`.
+
+## Custom Title
+
+You can customize Title with using some variables. These are the current variables you can use:
+
+  - `bashName`
+  - `hostName`
+  - `platform`
+  - `home`
+
+Default version of Title template is `Template ({{ bashName }})`.
