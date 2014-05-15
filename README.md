@@ -53,5 +53,6 @@ Template ({{ bashName }})
   - Change **scrollback** limit
   - Start shell sessions with additional parameters.
   - You can **pipe the text and paths** to the Terminal sessions.
+  - Paste from clipboard
 
 [1]: http://atom.io/packages/term

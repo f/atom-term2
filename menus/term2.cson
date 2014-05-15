@@ -17,6 +17,8 @@
   ]
 ]
 'context-menu':
+  '.term':
+    'Paste': 'term2:paste'
   '.overlayer':
     'Term2: Pipe selection to last Terminal session': 'term2:pipe-selection'
     'Term2: Pipe file path to the Terminal session': 'term2:pipe-path'
