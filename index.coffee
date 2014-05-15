@@ -1,3 +1,4 @@
+path = require 'path'
 TermView = require './lib/TermView'
 
 capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
@@ -9,7 +10,11 @@ module.exports =
 
     configDefaults:
       autoRunCommand: null
-      shellArguments: '--init-file ~/.bash_profile'
+      shellArguments: do ({SHELL, HOME}=process.env)->
+        switch path.basename SHELL.toLowerCase()
+          when 'bash' then "--init-file #{path.join HOME, '.bash_profile'}"
+          when 'zsh'  then ""
+          else ''
       openPanesInSameSplit: no
 
     activate: (@state)->

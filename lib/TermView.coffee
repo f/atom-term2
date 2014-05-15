@@ -20,17 +20,16 @@ class TermView extends View
 
   constructor: (@opts={})->
     opts.shell = process.env.SHELL or 'bash'
-    opts.shellArguments or= []
+    opts.shellArguments or= ''
 
     editorPath = keypather.get atom, 'workspace.getEditorViews[0].getEditor().getPath()'
     opts.cwd = opts.cwd or atom.project.getPath() or editorPath or process.env.HOME
     super
 
   initialize: (@state)->
-    console.log "initializing"
     {cols, rows} = @getDimensions()
     {cwd, shell, shellArguments, runCommand} = @opts
-    args = shellArguments.split /\s+/g
+    args = shellArguments.split(/\s+/g).filter (arg)-> arg
     @pty = pty = ptyjs.spawn shell, args, {
       name: if fs.existsSync('/usr/share/terminfo/x/xterm-256color') then 'xterm-256color' else 'xterm'
       env : process.env
