@@ -4,17 +4,19 @@
 #       'Open terminal here': 'term:open'
 
 'menu': [
-  {
-    'label': 'Packages'
+  'label': 'Packages'
+  'submenu': [
+    'label': 'Term 2'
     'submenu': [
-      'label': 'Term 2'
-      'submenu': [
-        { 'label': 'Open New Terminal in New Tab', 'command': 'term2:open' },
-        { 'label': 'Open New Terminal in Right Pane', 'command': 'term2:open-split-right' },
-        { 'label': 'Open New Terminal in Bottom Pane', 'command': 'term2:open-split-down' },
-        { 'label': 'Open New Terminal in Top Pane', 'command': 'term2:open-split-up' },
-        { 'label': 'Open New Terminal in Left Pane', 'command': 'term2:open-split-left' }
-      ]
+      {'label': 'Open New Terminal in New Tab', 'command': 'term2:open'}
+      {'label': 'Open New Terminal in Right Pane', 'command': 'term2:open-split-right'}
+      {'label': 'Open New Terminal in Bottom Pane', 'command': 'term2:open-split-down'}
+      {'label': 'Open New Terminal in Top Pane', 'command': 'term2:open-split-up'}
+      {'label': 'Open New Terminal in Left Pane', 'command': 'term2:open-split-left'}
     ]
-  }
+  ]
 ]
+'context-menu':
+  '.overlayer':
+    'Term2: Pipe selection to last Terminal session': 'term2:pipe-selection'
+    'Term2: Pipe file path to the Terminal session': 'term2:pipe-path'
