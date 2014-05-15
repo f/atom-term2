@@ -5,7 +5,7 @@ fs         = require 'fs'
 
 debounce   = require 'debounce'
 ptyjs      = require 'pty.js'
-Terminal   = require 'term.js'
+Terminal   = require './term.js'
 
 keypather  = do require 'keypather'
 
@@ -55,7 +55,7 @@ class TermView extends View
 
     term.on "data", (data)=> pty.write data
     term.open this.get(0)
-
+    term
     pty.write "#{runCommand}#{os.EOL}" if runCommand
     pty.pipe term
     term.focus()
@@ -77,6 +77,10 @@ class TermView extends View
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
     @attachResizeEvents()
+    @command "term2:paste", => @paste()
+
+  paste: ->
+    @pty.write atom.clipboard.read()
 
   attachResizeEvents: ->
     setTimeout (=> @resizeToPane()), 10
