@@ -99,11 +99,10 @@ module.exports =
       pane.activateItem item
 
     handleRemoveTerm: (termView)->
-      {termViews} = this
-      termViews.splice termViews.indexOf(termView), 1
+      @termViews.splice @termViews.indexOf(termView), 1
 
     deactivate:->
-      termViews.forEach (view)-> view.deactivate()
+      @termViews.forEach (view)-> view.deactivate()
 
     serialize:->
       termViewsState = this.termViews.map (view)-> view.serialize()
