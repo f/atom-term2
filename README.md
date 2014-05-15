@@ -57,7 +57,7 @@ Template ({{ bashName }})
 
 # Contributors
 
-  - [tjmehta][2] *(Owner of the original Term Package)*
+  - [@tjmehta][2] *(Owner of the original Term Package)*
   - [@Azerothian][3]
   - [@abe33][4]
 
