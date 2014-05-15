@@ -6,7 +6,6 @@ capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 module.exports =
 
     termViews: []
-    splits: {}
 
     configDefaults:
       titleTemplate: "Terminal ({{ bashName }})"
@@ -42,15 +41,20 @@ module.exports =
       termView = @createTermView()
       direction = capitalize direction
 
+      splitter = ->
+        activePane.termSplits[direction] = activePane["split#{direction}"] items: [termView]
+
+      activePane = atom.workspace.getActivePane()
+      activePane.termSplits or= {}
       if openPanesInSameSplit
-        if @splits[direction] and @splits[direction].items.length > 0
-          pane = @splits[direction]
+        if activePane.termSplits[direction] and activePane.termSplits[direction].items.length > 0
+          pane = activePane.termSplits[direction]
           item = pane.addItem termView
           pane.activateItem item
         else
-          @splits[direction] = atom.workspace.getActivePane()["split#{direction}"] items: [termView]
+          splitter()
       else
-        atom.workspace.getActivePane()["split#{direction}"] items: [termView]
+        splitter()
 
     newTerm: ->
       termView = @createTermView()
