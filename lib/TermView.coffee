@@ -1,15 +1,14 @@
 util       = require 'util'
 path       = require 'path'
 os         = require 'os'
-fs         = require 'fs'
+fs         = require 'fs-plus'
 
 debounce   = require 'debounce'
-ptyjs      = require 'pty.js'
 Terminal   = require 'atom-term.js'
 
 keypather  = do require 'keypather'
 
-{$, View} = require 'atom'
+{$, View, Task} = require 'atom'
 
 last = (str)-> str[str.length-1]
 
@@ -33,15 +32,20 @@ class TermView extends View
     opts.cwd = opts.cwd or atom.project.getPath() or editorPath or process.env.HOME
     super
 
+  forkPtyProcess: (args=[])->
+    processPath = require.resolve './pty'
+    path = atom.project.getPath() ? '~'
+    Task.once processPath, fs.absolute(path), args
+
   initialize: (@state)->
     {cols, rows} = @getDimensions()
     {cwd, shell, shellArguments, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg)-> arg
-    @pty = pty = ptyjs.spawn shell, args, {
-      name: if fs.existsSync('/usr/share/terminfo/x/xterm-256color') then 'xterm-256color' else 'xterm'
-      env : process.env
-      cwd, cols, rows
-    }
+
+    @ptyProcess = @forkPtyProcess args
+    @ptyProcess.on 'term2:data', (data) => @term.write data
+    @ptyProcess.on 'term2:exit', (data) => @destroy()
+
     colorsArray = (colorCode for colorName, colorCode of colors)
     @term = term = new Terminal {
       useStyle: yes
@@ -52,15 +56,20 @@ class TermView extends View
 
     term.end = => @destroy()
 
-    term.on "data", (data)=> pty.write data
+    term.on "data", (data)=> @input data
     term.open this.get(0)
 
-    pty.write "#{runCommand}#{os.EOL}" if runCommand
-    pty.pipe term
+    @input "#{runCommand}#{os.EOL}" if runCommand
     term.focus()
 
     @attachEvents()
     @resizeToPane()
+
+  input: (data) ->
+    @ptyProcess.send event: 'input', text: data
+
+  resize: (cols, rows) ->
+    @ptyProcess.send {event: 'resize', rows, cols}
 
   titleVars: ->
     bashName: last @opts.shell.split '/'
@@ -79,7 +88,7 @@ class TermView extends View
     @command "term2:paste", => @paste()
 
   paste: ->
-    @pty.write atom.clipboard.read()
+    @input atom.clipboard.read()
 
   attachResizeEvents: ->
     setTimeout (=> @resizeToPane()), 10
@@ -102,7 +111,7 @@ class TermView extends View
     return unless @term
     return if @term.rows is rows and @term.cols is cols
 
-    @pty.resize cols, rows
+    @resize cols, rows
     @term.resize cols, rows
     atom.workspaceView.getActivePaneView().css overflow: 'visible'
 
@@ -115,8 +124,8 @@ class TermView extends View
     {cols, rows}
 
   destroy: ->
+    @ptyProcess.terminate()
     @detachResizeEvents()
-    @pty.destroy()
     @term.destroy()
     parentPane = atom.workspace.getActivePane()
     if parentPane.activeItem is this

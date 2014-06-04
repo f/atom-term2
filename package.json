@@ -17,8 +17,9 @@
   },
   "dependencies": {
     "atom-term.js": "0.0.55",
-    "pty.js": "^0.2.4",
     "debounce": "0.0.3",
-    "keypather": "^1.3.2"
+    "fs-plus": "^2.2.3",
+    "keypather": "^1.3.2",
+    "pty.js": "^0.2.4"
   }
 }
