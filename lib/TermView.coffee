@@ -48,7 +48,7 @@ class TermView extends View
 
     colorsArray = (colorCode for colorName, colorCode of colors)
     @term = term = new Terminal {
-      useStyle: yes
+      useStyle: no
       screenKeys: no
       colors: colorsArray
       cursorBlink, scrollback, cols, rows
@@ -91,19 +91,12 @@ class TermView extends View
     @input atom.clipboard.read()
 
   attachResizeEvents: ->
-    setTimeout (=> @resizeToPane()), 10
-    @on "focus", @resizeToPane
-    @resizeInterval = setInterval @resizeToPane.bind(this), 50
-    @resizeHandlers = [debounce @resizeToPane.bind(this), 10]
-    if window.onresize
-      @resizeHandlers.push window.onresize
-    window.onresize = (event)=> @resizeHandlers.forEach (handler)-> handler event
+    setTimeout (=>  @resizeToPane()), 10
+    @on 'focus', @resizeToPane
+    $(window).on 'resize', => @resizeToPane()
 
   detachResizeEvents: ->
-    window.onresize = @resizeHandlers.pop?()
-    @off "focus", @resizeToPane
-    @resizeHandlers = []
-    clearInterval @resizeInterval
+    @off 'focus', @resizeToPane
 
   resizeToPane: ->
     {cols, rows} = @getDimensions()
@@ -111,15 +104,22 @@ class TermView extends View
     return unless @term
     return if @term.rows is rows and @term.cols is cols
 
+    console.log cols, rows
     @resize cols, rows
     @term.resize cols, rows
     atom.workspaceView.getActivePaneView().css overflow: 'visible'
 
   getDimensions: ->
-    colSize = if @term then @find('.terminal').width() / @term.cols else 7
-    rowSize = if @term then @find('.terminal').height() / @term.rows else 15
-    cols = @width() / colSize | 0
-    rows = @height() / rowSize | 0
+    fakeCol = $("<span id='colSize'>&nbsp;</span>").css visibility: 'hidden'
+    if @term
+      @find('.terminal').append fakeCol
+      fakeCol = @find(".terminal span#colSize")
+      cols = Math.floor (@width() / fakeCol.width()) or 7
+      rows = Math.floor (@height() / fakeCol.height()) or 14
+      fakeCol.remove()
+    else
+      cols = Math.floor @width() / 7
+      rows = Math.floor @height() / 14
 
     {cols, rows}
 
