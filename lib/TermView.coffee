@@ -104,7 +104,6 @@ class TermView extends View
     return unless @term
     return if @term.rows is rows and @term.cols is cols
 
-    console.log cols, rows
     @resize cols, rows
     @term.resize cols, rows
     atom.workspaceView.getActivePaneView().css overflow: 'visible'
@@ -114,8 +113,8 @@ class TermView extends View
     if @term
       @find('.terminal').append fakeCol
       fakeCol = @find(".terminal span#colSize")
-      cols = Math.floor (@width() / fakeCol.width()) or 7
-      rows = Math.floor (@height() / fakeCol.height()) or 14
+      cols = Math.floor (@width() / fakeCol.width()) or 9
+      rows = Math.floor (@height() / fakeCol.height()) or 16
       fakeCol.remove()
     else
       cols = Math.floor @width() / 7
