@@ -97,6 +97,7 @@ class TermView extends View
 
   detachResizeEvents: ->
     @off 'focus', @resizeToPane
+    $(window).off 'resize'
 
   resizeToPane: ->
     {cols, rows} = @getDimensions()
@@ -123,8 +124,8 @@ class TermView extends View
     {cols, rows}
 
   destroy: ->
-    @ptyProcess.terminate()
     @detachResizeEvents()
+    @ptyProcess.terminate()
     @term.destroy()
     parentPane = atom.workspace.getActivePane()
     if parentPane.activeItem is this
