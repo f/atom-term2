@@ -102,6 +102,7 @@ class TermView extends View
   focus: ->
     @resizeToPane()
     @focusTerm()
+    super
 
   focusTerm: ->
     @term.element.focus()
