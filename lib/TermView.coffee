@@ -99,7 +99,7 @@ class TermView extends View
     @off 'focus', @onFocus
     $(window).off 'resize'
 
-  focus: ->
+  onFocus: ->
     @resizeToPane()
     @focusTerm()
 
