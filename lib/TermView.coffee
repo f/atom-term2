@@ -92,14 +92,14 @@ class TermView extends View
 
   attachResizeEvents: ->
     setTimeout (=>  @resizeToPane()), 10
-    @on 'focus', @onFocus
+    @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane()
 
   detachResizeEvents: ->
-    @off 'focus', @onFocus
+    @off 'focus', @focus
     $(window).off 'resize'
 
-  onFocus: ->
+  focus: ->
     @resizeToPane()
     @focusTerm()
 
