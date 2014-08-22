@@ -13,13 +13,13 @@
   "repository": "https://github.com/webBoxio/atom-term2",
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=0.121.0"
   },
   "dependencies": {
     "atom-term.js": "0.0.55",
     "debounce": "0.0.3",
     "fs-plus": "^2.2.3",
     "keypather": "^1.3.2",
-    "pty.js": "^0.2.4"
+    "pty.js": "https://github.com/chjj/pty.js/archive/master.tar.gz"
   }
 }
