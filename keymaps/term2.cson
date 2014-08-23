@@ -21,5 +21,7 @@
   'cmd-k t down': 'term2:open-split-down'
 
 '.term2':
+  'cmd-c': 'term2:copy'
+  'ctrl-c': 'term2:copy'
   'cmd-v': 'term2:paste'
   'ctrl-v': 'term2:paste'
