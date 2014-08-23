@@ -95,7 +95,11 @@ class TermView extends View
         @term._selected.x1, @term._selected.x2,
         @term._selected.y1, @term._selected.y2)
     else # fallback to DOM-based selections
-      text = @term.context.getSelection().toString()
+      rawText = @term.context.getSelection().toString()
+      rawLines = rawText.split(/\r?\n/g)
+      lines = rawLines.map (line) ->
+        line.replace(/\s/g, " ").trimRight()
+      text = lines.join("\n")
     atom.clipboard.write text
 
   paste: ->
