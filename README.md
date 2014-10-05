@@ -42,7 +42,7 @@ You can customize Title with using some variables. These are the current variabl
 Default version of **title template** is
 
 ```
-Template ({{ bashName }})
+Terminal ({{ bashName }})
 ```
 
 ## Additional Features
