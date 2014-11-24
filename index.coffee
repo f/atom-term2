@@ -28,6 +28,8 @@ module.exports =
         brightPurple: '#ad7fa8'
         brightCyan  : '#34e2e2'
         brightWhite : '#eeeeec'
+        background  : '#000000'
+        foreground  : '#f0f0f0'
 
       scrollback: 1000
       cursorBlink: yes
@@ -53,12 +55,14 @@ module.exports =
         normalBlue, normalPurple, normalCyan, normalWhite
         brightBlack, brightRed, brightGreen, brightYellow
         brightBlue, brightPurple, brightCyan, brightWhite
+        background, foreground
       }} = atom.config.getSettings().term2
       [
         normalBlack, normalRed, normalGreen, normalYellow
         normalBlue, normalPurple, normalCyan, normalWhite
         brightBlack, brightRed, brightGreen, brightYellow
         brightBlue, brightPurple, brightCyan, brightWhite
+        background, foreground
       ]
 
     createTermView:->
