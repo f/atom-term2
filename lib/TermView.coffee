@@ -86,6 +86,21 @@ class TermView extends View
     @resizeToPane = @resizeToPane.bind this
     @attachResizeEvents()
     @command "term2:paste", => @paste()
+    @command "term2:copy", => @copy()
+
+  copy: ->
+    if  @term._selected  # term.js visual mode selections
+      textarea = @term.getCopyTextarea()
+      text = @term.grabText(
+        @term._selected.x1, @term._selected.x2,
+        @term._selected.y1, @term._selected.y2)
+    else # fallback to DOM-based selections
+      rawText = @term.context.getSelection().toString()
+      rawLines = rawText.split(/\r?\n/g)
+      lines = rawLines.map (line) ->
+        line.replace(/\s/g, " ").trimRight()
+      text = lines.join("\n")
+    atom.clipboard.write text
 
   paste: ->
     @input atom.clipboard.read()

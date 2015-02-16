@@ -18,6 +18,7 @@
 ]
 'context-menu':
   '.term':
+    'Copy': 'term2:copy'
     'Paste': 'term2:paste'
   '.overlayer':
     'Term2: Pipe selection to last Terminal session': 'term2:pipe-selection'
