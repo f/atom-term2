@@ -43,20 +43,22 @@ module.exports =
     activate: (@state)->
 
       ['up', 'right', 'down', 'left'].forEach (direction)=>
-        atom.workspaceView.command "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
+        atom.commands.add "atom-workspace", "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
 
-      atom.workspaceView.command "term2:open", @newTerm.bind(this)
-      atom.workspaceView.command "term2:pipe-path", @pipeTerm.bind(this, 'path')
-      atom.workspaceView.command "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
+      atom.commands.add "atom-workspace", "term2:open", @newTerm.bind(this)
+      atom.commands.add "atom-workspace", "term2:pipe-path", @pipeTerm.bind(this, 'path')
+      atom.commands.add "atom-workspace", "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
 
     getColors: ->
-      {colors: {
+      console.log atom.config.get 'term2.colors.normalBlack'
+      console.log atom.config.getAll 'term2.colors'
+      {
         normalBlack, normalRed, normalGreen, normalYellow
         normalBlue, normalPurple, normalCyan, normalWhite
         brightBlack, brightRed, brightGreen, brightYellow
         brightBlue, brightPurple, brightCyan, brightWhite
         background, foreground
-      }} = atom.config.getSettings().term2
+      } = (atom.config.getAll 'term2.colors')[0].value
       [
         normalBlack, normalRed, normalGreen, normalYellow
         normalBlue, normalPurple, normalCyan, normalWhite
@@ -110,7 +112,7 @@ module.exports =
       pane.activateItem item
 
     pipeTerm: (action)->
-      editor = atom.workspace.getActiveEditor()
+      editor = @getActiveEditor()
       stream = switch action
         when 'path'
           editor.getBuffer().file.path

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "atom-term.js": "0.0.55",
+    "atom-space-pen-views": "^2.0.3",
     "debounce": "0.0.3",
     "fs-plus": "^2.2.3",
     "keypather": "^1.3.2",
