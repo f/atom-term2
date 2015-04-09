@@ -8,7 +8,8 @@ Terminal   = require 'atom-term.js'
 
 keypather  = do require 'keypather'
 
-{$, View, Task} = require 'atom'
+{Task} = require 'atom'
+{$, View} = require 'atom-space-pen-views'
 
 last = (str)-> str[str.length-1]
 
@@ -29,12 +30,12 @@ class TermView extends View
     opts.shellArguments or= ''
 
     editorPath = keypather.get atom, 'workspace.getEditorViews[0].getEditor().getPath()'
-    opts.cwd = opts.cwd or atom.project.getPath() or editorPath or process.env.HOME
+    opts.cwd = opts.cwd or atom.project.getPaths()[0] or editorPath or process.env.HOME
     super
 
   forkPtyProcess: (args=[])->
     processPath = require.resolve './pty'
-    path = atom.project.getPath() ? '~'
+    path = atom.project.getPaths()[0] ? '~'
     Task.once processPath, fs.absolute(path), args
 
   initialize: (@state)->
@@ -85,8 +86,8 @@ class TermView extends View
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
     @attachResizeEvents()
-    @command "term2:paste", => @paste()
-    @command "term2:copy", => @copy()
+    atom.commands.add "atom-workspace", "term2:paste", => @paste()
+    atom.commands.add "atom-workspace", "term2:copy", => @copy()
 
   copy: ->
     if  @term._selected  # term.js visual mode selections
@@ -131,7 +132,7 @@ class TermView extends View
 
     @resize cols, rows
     @term.resize cols, rows
-    atom.workspaceView.getActivePaneView().css overflow: 'visible'
+    atom.views.getView(atom.workspace).style.overflow = 'visible'
 
   getDimensions: ->
     fakeCol = $("<span id='colSize'>&nbsp;</span>").css visibility: 'hidden'
