@@ -47,7 +47,7 @@ Terminal ({{ bashName }})
 
 ## Additional Features
 
-  - You can define **Terminal Colors** in settings.
+  - You can define **Terminal Colors** in `config.cson`.
   - **Run a defined command automatically** when shell session starts.
   - Turn on or off **blinking cursor**
   - Change **scrollback** limit
