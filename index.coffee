@@ -50,8 +50,6 @@ module.exports =
       atom.commands.add "atom-workspace", "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
 
     getColors: ->
-      console.log atom.config.get 'term2.colors.normalBlack'
-      console.log atom.config.getAll 'term2.colors'
       {
         normalBlack, normalRed, normalGreen, normalYellow
         normalBlue, normalPurple, normalCyan, normalWhite
