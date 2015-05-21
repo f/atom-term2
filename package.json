@@ -3,13 +3,15 @@
   "main": "./index",
   "version": "0.9.5",
   "description": "You can run shell sessions within Atom Editor using Term 2 package. You can run **Vim, Emacs, Htop, etc.** in your Atom. It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power of Atom Package environment.",
-  "activationEvents": [
-    "term2:open",
-    "term2:open-split-left",
-    "term2:open-split-up",
-    "term2:open-split-right",
-    "term2:open-split-down"
-  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "term2:open",
+      "term2:open-split-left",
+      "term2:open-split-up",
+      "term2:open-split-right",
+      "term2:open-split-down"
+    ]
+  },
   "repository": "https://github.com/webBoxio/atom-term2",
   "license": "MIT",
   "engines": {

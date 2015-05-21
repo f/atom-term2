@@ -8,37 +8,86 @@ module.exports =
     termViews: []
     focusedTerminal: off
 
-    configDefaults:
-      autoRunCommand: null
-      titleTemplate: "Terminal ({{ bashName }})"
+    config:
+      autoRunCommand:
+        type: 'string'
+        default: ''
+      titleTemplate:
+        type: 'string'
+        default: "Terminal ({{ bashName }})"
       colors:
-        normalBlack : '#2e3436'
-        normalRed   : '#cc0000'
-        normalGreen : '#4e9a06'
-        normalYellow: '#c4a000'
-        normalBlue  : '#3465a4'
-        normalPurple: '#75507b'
-        normalCyan  : '#06989a'
-        normalWhite : '#d3d7cf'
-        brightBlack : '#555753'
-        brightRed   : '#ef2929'
-        brightGreen : '#8ae234'
-        brightYellow: '#fce94f'
-        brightBlue  : '#729fcf'
-        brightPurple: '#ad7fa8'
-        brightCyan  : '#34e2e2'
-        brightWhite : '#eeeeec'
-        background  : '#000000'
-        foreground  : '#f0f0f0'
-
-      scrollback: 1000
-      cursorBlink: yes
-      shellArguments: do ({SHELL, HOME}=process.env)->
-        switch path.basename SHELL.toLowerCase()
-          when 'bash' then "--init-file #{path.join HOME, '.bash_profile'}"
-          when 'zsh'  then ""
-          else ''
-      openPanesInSameSplit: no
+        type: 'object'
+        properties:
+          normalBlack:
+            type: 'color'
+            default: '#2e3436'
+          normalRed:
+            type: 'color'
+            default: '#cc0000'
+          normalGreen:
+            type: 'color'
+            default: '#4e9a06'
+          normalYellow:
+            type: 'color'
+            default: '#c4a000'
+          normalBlue:
+            type: 'color'
+            default: '#3465a4'
+          normalPurple:
+            type: 'color'
+            default: '#75507b'
+          normalCyan:
+            type: 'color'
+            default: '#06989a'
+          normalWhite:
+            type: 'color'
+            default: '#d3d7cf'
+          brightBlack:
+            type: 'color'
+            default: '#555753'
+          brightRed:
+            type: 'color'
+            default: '#ef2929'
+          brightGreen:
+            type: 'color'
+            default: '#8ae234'
+          brightYellow:
+            type: 'color'
+            default: '#fce94f'
+          brightBlue:
+            type: 'color'
+            default: '#729fcf'
+          brightPurple:
+            type: 'color'
+            default: '#ad7fa8'
+          brightCyan:
+            type: 'color'
+            default: '#34e2e2'
+          brightWhite:
+            type: 'color'
+            default: '#eeeeec'
+          background:
+            type: 'color'
+            default: '#000000'
+          foreground:
+            type: 'color'
+            default: '#f0f0f0'
+      scrollback:
+        type: 'integer'
+        default: 1000
+      cursorBlink:
+        type: 'boolean'
+        default: true
+      shellArguments:
+        type: 'string'
+        default: do ({SHELL, HOME}=process.env)->
+          switch path.basename SHELL.toLowerCase()
+            when 'bash' then "--init-file #{path.join HOME, '.bash_profile'}"
+            when 'zsh'  then ""
+            else ''
+      openPanesInSameSplit:
+        type: 'boolean'
+        default: false
 
     activate: (@state)->
 
