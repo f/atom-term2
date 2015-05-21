@@ -47,7 +47,7 @@ class TermView extends View
     @ptyProcess.on 'term2:data', (data) => @term.write data
     @ptyProcess.on 'term2:exit', (data) => @destroy()
 
-    colorsArray = (colorCode for colorName, colorCode of colors)
+    colorsArray = colors.map (color) -> color.toHexString()
     @term = term = new Terminal {
       useStyle: no
       screenKeys: no

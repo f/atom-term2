@@ -17,9 +17,24 @@
   ]
 ]
 'context-menu':
-  '.term':
-    'Copy': 'term2:copy'
-    'Paste': 'term2:paste'
-  '.overlayer':
-    'Term2: Pipe selection to last Terminal session': 'term2:pipe-selection'
-    'Term2: Pipe file path to the Terminal session': 'term2:pipe-path'
+  '.term': [
+    {
+      'label': 'Copy'
+      'command': 'term2:copy'
+    }
+    {
+      'label': 'Paste'
+      'command': 'term2:paste'
+    }
+  ]
+
+  '.overlayer': [
+    {
+      'label': 'Term2: Pipe selection to last Terminal session'
+      'command': 'term2:pipe-selection'
+    }
+    {
+      'label': 'Term2: Pipe file path to the Terminal session'
+      'command': 'term2:pipe-path'
+    }
+  ]
