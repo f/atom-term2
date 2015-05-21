@@ -83,6 +83,9 @@ class TermView extends View
     titleTemplate = @opts.titleTemplate or "({{ bashName }})"
     renderTemplate titleTemplate, @vars
 
+  getIconName: ->
+    "terminal"
+
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
     @attachResizeEvents()
