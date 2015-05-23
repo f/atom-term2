@@ -14,6 +14,12 @@
   'ctrl-alt-up': 'term2:open-split-up'
   'ctrl-alt-down': 'term2:open-split-down'
 
+  'ctrl-k t t': 'term2:open'
+  'ctrl-k t right': 'term2:open-split-right'
+  'ctrl-k t left': 'term2:open-split-left'
+  'ctrl-k t up': 'term2:open-split-up'
+  'ctrl-k t down': 'term2:open-split-down'
+
   'cmd-k t t': 'term2:open'
   'cmd-k t right': 'term2:open-split-right'
   'cmd-k t left': 'term2:open-split-left'
@@ -23,5 +29,7 @@
 '.term2':
   'cmd-c': 'term2:copy'
   'ctrl-c': 'term2:copy'
+  'ctrl-insert': 'term2:copy'
   'cmd-v': 'term2:paste'
   'ctrl-v': 'term2:paste'
+  'shift-insert': 'term2:paste'
