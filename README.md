@@ -5,6 +5,14 @@ It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power 
 
 It's a fork and rebuilt version of "[Term][1]" package.
 
+## What about this fork ?!
+My fork just adds a 'ShellOverride' configuration option which allows to override the shell Term2 is using (your default shell).
+
+If, like me, your default shell is zsh you see that it's not yet fully compatible with Term2 (scrolling do not work): setting ShellOverride 
+to i.e. 'bash' let you use Term2 with another (working) shell without messing up with your default shell configuration. 
+Thats all :)
+
+
 To install **Term2** easily into your Atom;
 
 ```bash

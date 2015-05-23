@@ -78,6 +78,9 @@ module.exports =
       cursorBlink:
         type: 'boolean'
         default: true
+      shellOverride:
+        type: 'string'
+        default: ''
       shellArguments:
         type: 'string'
         default: do ({SHELL, HOME}=process.env)->
@@ -117,6 +120,7 @@ module.exports =
     createTermView:->
       opts =
         runCommand    : atom.config.get 'term2.autoRunCommand'
+        shellOverride : atom.config.get 'term2.shellOverride'
         shellArguments: atom.config.get 'term2.shellArguments'
         titleTemplate : atom.config.get 'term2.titleTemplate'
         cursorBlink   : atom.config.get 'term2.cursorBlink'
