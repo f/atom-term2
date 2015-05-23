@@ -26,24 +26,25 @@ class TermView extends View
     @div class: 'term2'
 
   constructor: (@opts={})->
-    opts.shell = process.env.SHELL or 'bash'
+    if opts.shellOverride
+        opts.shell = opts.shellOverride
+    else
+        opts.shell = process.env.SHELL or 'bash'
     opts.shellArguments or= ''
-
     editorPath = keypather.get atom, 'workspace.getEditorViews[0].getEditor().getPath()'
     opts.cwd = opts.cwd or atom.project.getPaths()[0] or editorPath or process.env.HOME
     super
 
-  forkPtyProcess: (args=[])->
+  forkPtyProcess: (sh, args=[])->
     processPath = require.resolve './pty'
     path = atom.project.getPaths()[0] ? '~'
-    Task.once processPath, fs.absolute(path), args
+    Task.once processPath, fs.absolute(path), sh, args
 
   initialize: (@state)->
     {cols, rows} = @getDimensions()
-    {cwd, shell, shellArguments, runCommand, colors, cursorBlink, scrollback} = @opts
+    {cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg)-> arg
-
-    @ptyProcess = @forkPtyProcess args
+    @ptyProcess = @forkPtyProcess shellOverride, args
     @ptyProcess.on 'term2:data', (data) => @term.write data
     @ptyProcess.on 'term2:exit', (data) => @destroy()
 

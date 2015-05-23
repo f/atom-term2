@@ -2,16 +2,21 @@
 
 pty = require 'pty.js'
 
-module.exports = (ptyCwd, args) ->
+module.exports = (ptyCwd, sh, args) ->
   callback = @async()
-  if process.platform is 'win32'
-    shell = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+  if sh
+      shell = sh
+  else
+      if process.platform is 'win32'
+        shell = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+      else
+        shell = process.env.SHELL
 
+  if process.platform is 'win32'
     # TODO: Remove this swapping once atom/pty.js#47 lands
     cols = 30
     rows = 80
   else
-    shell = process.env.SHELL
     cols = 80
     rows = 30
 
