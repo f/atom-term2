@@ -69,6 +69,8 @@ class TermView extends View
 
   input: (data) ->
     @ptyProcess.send event: 'input', text: data
+    @resizeToPane()
+    @focusTerm()
 
   resize: (cols, rows) ->
     @ptyProcess.send {event: 'resize', rows, cols}
