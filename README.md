@@ -30,11 +30,18 @@ apm install term2
 | `ctrl + alt + right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
 | `ctrl + alt + down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
 | `ctrl + alt + left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
+| `ctrl + k, t, t` | `term2:open` | Opens new terminal tab pane |
+| `ctrl + k, t, up`| `term2:open-split-up` | Opens new terminal tab pane in up split |
+| `ctrl + k, t, right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
+| `ctrl + k, t, down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
+| `ctrl + k, t, left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
 | `cmd + k, t, t` | `term2:open` | Opens new terminal tab pane |
 | `cmd + k, t, up`| `term2:open-split-up` | Opens new terminal tab pane in up split |
 | `cmd + k, t, right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
 | `cmd + k, t, down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
 | `cmd + k, t, left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
+| `ctrl + insert | `term2:copy` | Copy text (if `ctrl + c` is not working) |
+| `shift + insert | `term2:paste` | Paste text (if `ctrl + v` is not working) |
 
 ## Customize Title
 
