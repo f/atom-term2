@@ -8,7 +8,8 @@ module.exports = (ptyCwd, sh, args) ->
       shell = sh
   else
       if process.platform is 'win32'
-        shell = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+        path = require 'path'
+        shell = path.resolve(process.env.SystemRoot, 'WindowsPowerShell', 'v1.0', 'powershell.exe')
       else
         shell = process.env.SHELL
 
