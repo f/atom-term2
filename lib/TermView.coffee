@@ -61,6 +61,9 @@ class TermView extends View
     term.on "data", (data)=> @input data
     term.open this.get(0)
 
+    # remove background color in favor of the atom background
+    term.element.style.background = null
+
     @input "#{runCommand}#{os.EOL}" if runCommand
     term.focus()
 
@@ -141,10 +144,10 @@ class TermView extends View
     atom.views.getView(atom.workspace).style.overflow = 'visible'
 
   getDimensions: ->
-    fakeCol = $("<span id='colSize'>&nbsp;</span>").css visibility: 'hidden'
+    fakeRow = $("<div><span>&nbsp;</span></div>").css visibility: 'hidden'
     if @term
-      @find('.terminal').append fakeCol
-      fakeCol = @find(".terminal span#colSize")
+      @find('.terminal').append fakeRow
+      fakeCol = fakeRow.children().first()
       cols = Math.floor (@width() / fakeCol.width()) or 9
       rows = Math.floor (@height() / fakeCol.height()) or 16
       fakeCol.remove()
