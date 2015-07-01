@@ -6,17 +6,17 @@ It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power 
 It's a fork and rebuilt version of "[Term][1]" package.
 
 ## What about this fork ?!
-My fork just adds a 'ShellOverride' configuration option which allows to override the shell Term2 is using (your default shell).
 
-If, like me, your default shell is zsh you see that it's not yet fully compatible with Term2 (scrolling do not work): setting ShellOverride 
-to i.e. 'bash' let you use Term2 with another (working) shell without messing up with your default shell configuration. 
+This fork just adds a 'ShellOverride' configuration option which allows to override the shell Term2 is using (your default shell).
+
+If your default shell is zsh you see that it's not yet fully compatible with Term2 (scrolling do not work): setting ShellOverride
+to i.e. 'bash' let you use Term2 with another (working) shell without messing up with your default shell configuration.
 Thats all :)
-
 
 To install **Term2** easily into your Atom;
 
-```bash
-apm install term2
+```console
+$ apm install term2
 ```
 
 ![Vim, Emacs and HTop](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term3.png)
@@ -69,6 +69,45 @@ Terminal ({{ bashName }})
   - Start shell sessions with additional parameters.
   - You can **pipe the text and paths** to the Terminal sessions.
   - Paste from clipboard
+
+### Note about colors
+
+Currently, you will need to adjust the colors in `config.cson`
+(then you should be able to edit them in the package settings view).
+
+You can add something like (please note the 2 examples of color format):
+
+```cson
+term2:
+  colors:
+    normalBlack: #000
+    normalRed:
+      red: 255
+      blue: 0
+      green: 0
+      alpha: 1
+    normalGreen: ...
+    normalYellow: ...
+    normalBlue: ...
+    normalPurple: ...
+    normalCyan: ...
+    normalWhite: ...
+    brightBlack: ...
+    brightRed: ...
+    brightGreen: ...
+    brightYellow: ...
+    brightBlue: ...
+    brightPurple: ...
+    brightCyan: ...
+    brightWhite: ...
+    background: ...
+    foreground: ...
+```
+
+- **Colors are not taken from the Atom theme.**
+- alpha channel are not used for now.
+- _The background color is for now the only exception and is not used.
+The background is transparent so you benefit of Atom app background color._
 
 # Contributors
 
