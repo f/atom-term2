@@ -135,7 +135,14 @@ module.exports =
     splitTerm: (direction)->
       openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
       termView = @createTermView()
-      termView.on "click", => @focusedTerminal = termView
+      termView.on "click", =>
+
+        # get focus in the terminal
+        # avoid double click to get focus
+        termView.term.element.focus()
+        termView.term.focus()
+
+        @focusedTerminal = termView
       direction = capitalize direction
 
       splitter = =>
