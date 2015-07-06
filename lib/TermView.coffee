@@ -93,6 +93,7 @@ class TermView extends View
   applyStyle: ->
     # remove background color in favor of the atom background
     @term.element.style.background = null
+    @term.element.style.fontFamily = atom.config.get('editor.fontFamily')
 
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
