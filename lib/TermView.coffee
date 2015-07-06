@@ -61,12 +61,10 @@ class TermView extends View
     term.on "data", (data)=> @input data
     term.open this.get(0)
 
-    # remove background color in favor of the atom background
-    term.element.style.background = null
-
     @input "#{runCommand}#{os.EOL}" if runCommand
     term.focus()
 
+    @applyStyle()
     @attachEvents()
     @resizeToPane()
 
@@ -91,6 +89,11 @@ class TermView extends View
 
   getIconName: ->
     "terminal"
+
+  applyStyle: ->
+    # remove background color in favor of the atom background
+    @term.element.style.background = null
+    @term.element.style.fontFamily = atom.config.get('editor.fontFamily')
 
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
