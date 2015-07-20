@@ -122,6 +122,7 @@ class TermView extends View
     setTimeout (=>  @resizeToPane()), 10
     @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane()
+    atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
 
   detachResizeEvents: ->
     @off 'focus', @focus
