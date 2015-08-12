@@ -15,6 +15,12 @@ module.exports =
       titleTemplate:
         type: 'string'
         default: "Terminal ({{ bashName }})"
+      fontFamily:
+        type: 'string'
+        default: ''
+      fontSize:
+        type: 'string'
+        default: ''
       colors:
         type: 'object'
         properties:
@@ -124,6 +130,8 @@ module.exports =
         shellArguments: atom.config.get 'term2.shellArguments'
         titleTemplate : atom.config.get 'term2.titleTemplate'
         cursorBlink   : atom.config.get 'term2.cursorBlink'
+        fontFamily    : atom.config.get 'term2.fontFamily'
+        fontSize      : atom.config.get 'term2.fontSize'
         colors        : @getColors()
 
       termView = new TermView opts
