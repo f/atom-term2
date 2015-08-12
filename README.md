@@ -1,19 +1,25 @@
 # Atom Term 2
 
-You can run shell sessions within Atom Editor using Term 2 package. You can run **Vim, Emacs, Htop, etc.** in your Atom.
-It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power of Atom Package environment.
+Run shell sessions within Atom Editor using `term2` package.
+Run **Vim, Emacs, Htop, etc.** in Atom.
+It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power
+of Atom Package environment.
 
-It's a fork and rebuilt version of "[Term][1]" package.
+_It's a fork and rebuilt version of "[Term](http://atom.io/packages/term)" package._
 
 ## What about this fork ?!
 
-This fork just adds a 'ShellOverride' configuration option which allows to override the shell Term2 is using (your default shell).
+This fork adds a 'ShellOverride' configuration option which allows to override
+the shell Term2 is using (your default shell).
 
-If your default shell is zsh you see that it's not yet fully compatible with Term2 (scrolling do not work): setting ShellOverride
-to i.e. 'bash' let you use Term2 with another (working) shell without messing up with your default shell configuration.
-Thats all :)
+If your default shell is zsh you see that it's not yet fully compatible with
+Term2 (scrolling might not work):
+setting ShellOverride to i.e. 'bash' let you use Term2 with another (working)
+shell without messing up with your default shell configuration.
 
-To install **Term2** easily into your Atom;
+The fork was focused on this option in the first place but evolved a lot since.
+
+To install **Term2** easily into your Atom:
 
 ```console
 $ apm install term2
@@ -62,9 +68,9 @@ Terminal ({{ bashName }})
 
 ## Additional Features
 
-  - You can define **Terminal Colors** in `config.cson`.
   - **Run a defined command automatically** when shell session starts.
   - You can customize font-family or font-size (default to Atom settings values)
+  - You can define **Terminal Colors** in `config.cson`.
   - Turn on or off **blinking cursor**
   - Change **scrollback** limit
   - Start shell sessions with additional parameters.
@@ -110,13 +116,36 @@ term2:
 - _The background color is for now the only exception and is not used.
 The background is transparent so you benefit of Atom app background color._
 
-# Contributors
+## FAQ
 
-  - [@tjmehta][2] *(Owner of the original Term Package)*
-  - [@Azerothian][3]
-  - [@abe33][4]
+### Why some commands do not work like in my previous terminal ?
 
-[1]: http://atom.io/packages/term
-[2]: https://github.com/tjmehta
-[3]: https://github.com/Azerothian
-[4]: https://github.com/abe33
+It's [a known `$PATH` issue](https://github.com/webBoxio/atom-term2/issues/50).
+You are probably an OS X user (if not, let us know).
+GUI app doesn't get `/etc/paths` (and might come from `/usr/local/bin`).
+There is some workaround for OS X 10.9-, but OS X 10.10+ doesn't execute
+`/etc/launchd.conf` anymore.
+So, in order to get the right PATH in atom-term2 context, you have this
+solutions:
+
+- In your `.(bash|zsh|*)rc`, add
+
+  ```bash
+  export PATH=$(cat /etc/paths | xargs | tr " " :)
+  # or just hardcode your path like this
+  export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+  ```
+
+- You can automatically call a command when you open a terminal to `login` by
+editing your Atom config:
+
+  ```cson
+  term2:
+    autoRunCommand: 'login -f `whoami`'
+  ```
+
+---
+
+## [Contributors](https://github.com/webBoxio/atom-term2/graphs/contributors)
+
+## [License](LICENSE)
