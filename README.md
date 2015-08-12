@@ -64,6 +64,7 @@ Terminal ({{ bashName }})
 
   - You can define **Terminal Colors** in `config.cson`.
   - **Run a defined command automatically** when shell session starts.
+  - You can customize font-family or font-size (default to Atom settings values)
   - Turn on or off **blinking cursor**
   - Change **scrollback** limit
   - Start shell sessions with additional parameters.
