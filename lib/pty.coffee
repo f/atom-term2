@@ -13,13 +13,8 @@ module.exports = (ptyCwd, sh, args) ->
       else
         shell = process.env.SHELL
 
-  if process.platform is 'win32'
-    # TODO: Remove this swapping once atom/pty.js#47 lands
-    cols = 30
-    rows = 80
-  else
-    cols = 80
-    rows = 30
+  cols = 80
+  rows = 30
 
   ptyProcess = pty.fork shell, args,
     name: 'xterm-256color'
