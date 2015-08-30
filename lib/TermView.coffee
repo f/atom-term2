@@ -69,12 +69,18 @@ class TermView extends View
     @resizeToPane()
 
   input: (data) ->
-    @ptyProcess.send event: 'input', text: data
+    try
+      @ptyProcess.send event: 'input', text: data
+    catch error
+      console.log error
     @resizeToPane()
     @focusTerm()
 
   resize: (cols, rows) ->
-    @ptyProcess.send {event: 'resize', rows, cols}
+    try
+      @ptyProcess.send {event: 'resize', rows, cols}
+    catch error
+      console.log error
 
   titleVars: ->
     bashName: last @opts.shell.split '/'
