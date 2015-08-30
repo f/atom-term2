@@ -12,7 +12,7 @@
       "term2:open-split-down"
     ]
   },
-  "repository": "https://github.com/webBoxio/atom-term2",
+  "repository": "https://github.com/f/atom-term2",
   "license": "MIT",
   "engines": {
     "atom": ">=0.121.0"
