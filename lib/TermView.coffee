@@ -6,8 +6,6 @@ fs         = require 'fs-plus'
 debounce   = require 'debounce'
 Terminal   = require 'atom-term.js'
 
-keypather  = do require 'keypather'
-
 {Task} = require 'atom'
 {$, View} = require 'atom-space-pen-views'
 
@@ -26,13 +24,6 @@ class TermView extends View
     @div class: 'term2'
 
   constructor: (@opts={})->
-    if opts.shellOverride
-        opts.shell = opts.shellOverride
-    else
-        opts.shell = process.env.SHELL or 'bash'
-    opts.shellArguments or= ''
-    editorPath = keypather.get atom, 'workspace.getEditorViews[0].getEditor().getPath()'
-    opts.cwd = opts.cwd or atom.project.getPaths()[0] or editorPath or process.env.HOME
     super
 
   forkPtyProcess: (sh, args=[])->
@@ -41,19 +32,18 @@ class TermView extends View
     Task.once processPath, fs.absolute(path), sh, args
 
   initialize: (@state)->
-    {cols, rows} = @getDimensions()
-    {cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
-    args = shellArguments.split(/\s+/g).filter (arg)-> arg
-    @ptyProcess = @forkPtyProcess shellOverride, args
-    @ptyProcess.on 'term2:data', (data) => @term.write data
-    @ptyProcess.on 'term2:exit', (data) => @destroy()
+    {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
+    args = shellArguments.split(/\s+/g).filter (arg) -> arg
 
-    colorsArray = colors.map (color) -> color.toHexString()
+    if @opts.forkPTY
+      @ptyProcess = @forkPtyProcess shellOverride, args
+      @ptyProcess.on 'term2:data', (data) => @term.write data
+      @ptyProcess.on 'term2:exit', (data) => @destroy()
+
     @term = term = new Terminal {
       useStyle: no
       screenKeys: no
-      colors: colorsArray
-      cursorBlink, scrollback, cols, rows
+      colors, cursorBlink, scrollback, cols, rows
     }
 
     term.end = => @destroy()
@@ -61,7 +51,8 @@ class TermView extends View
     term.on "data", (data)=> @input data
     term.open this.get(0)
 
-    @input "#{runCommand}#{os.EOL}" if runCommand
+    @input "#{runCommand}#{os.EOL}" if (runCommand and @ptyProcess)
+
     term.focus()
 
     @applyStyle()
@@ -70,7 +61,10 @@ class TermView extends View
 
   input: (data) ->
     try
-      @ptyProcess.send event: 'input', text: data
+      if @ptyProcess
+        @ptyProcess.send event: 'input', text: data
+      else
+        @term.write data
     catch error
       console.log error
     @resizeToPane()
@@ -78,7 +72,10 @@ class TermView extends View
 
   resize: (cols, rows) ->
     try
-      @ptyProcess.send {event: 'resize', rows, cols}
+      if @ptyProcess
+        @ptyProcess.send {event: 'resize', rows, cols}
+      else
+        @term.resize cols, rows
     catch error
       console.log error
 
@@ -155,6 +152,7 @@ class TermView extends View
     @term.focus()
 
   resizeToPane: ->
+    return if not @ptyProcess?
     {cols, rows} = @getDimensions()
     return unless cols > 0 and rows > 0
     return unless @term
@@ -179,7 +177,8 @@ class TermView extends View
 
   destroy: ->
     @detachResizeEvents()
-    @ptyProcess.terminate()
+    if @ptyProcess
+      @ptyProcess.terminate()
     @term.destroy()
     parentPane = atom.workspace.getActivePane()
     if parentPane.activeItem is this

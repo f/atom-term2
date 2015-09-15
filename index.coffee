@@ -1,5 +1,6 @@
 path = require 'path'
 TermView = require './lib/TermView'
+keypather  = do require 'keypather'
 
 capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 
@@ -121,9 +122,9 @@ module.exports =
         brightBlack, brightRed, brightGreen, brightYellow
         brightBlue, brightPurple, brightCyan, brightWhite
         background, foreground
-      ]
+      ].map (color) -> color.toHexString()
 
-    createTermView:->
+    createTermView: (forkPTY=true, rows=16, cols=9)->
       opts =
         runCommand    : atom.config.get 'term2.autoRunCommand'
         shellOverride : atom.config.get 'term2.shellOverride'
@@ -133,6 +134,18 @@ module.exports =
         fontFamily    : atom.config.get 'term2.fontFamily'
         fontSize      : atom.config.get 'term2.fontSize'
         colors        : @getColors()
+        forkPTY       : forkPTY
+        rows          : rows
+        cols          : cols
+
+      if opts.shellOverride
+          opts.shell = opts.shellOverride
+      else
+          opts.shell = process.env.SHELL or 'bash'
+
+      # opts.shellArguments or= ''
+      editorPath = keypather.get atom, 'workspace.getEditorViews[0].getEditor().getPath()'
+      opts.cwd = opts.cwd or atom.project.getPaths()[0] or editorPath or process.env.HOME
 
       termView = new TermView opts
       termView.on 'remove', @handleRemoveTerm.bind this
@@ -171,11 +184,12 @@ module.exports =
       else
         splitter()
 
-    newTerm: ->
-      termView = @createTermView()
+    newTerm: (args...) ->
+      termView = @createTermView args...
       pane = atom.workspace.getActivePane()
       item = pane.addItem termView
       pane.activateItem item
+      termView
 
     pipeTerm: (action)->
       editor = @getActiveEditor()
