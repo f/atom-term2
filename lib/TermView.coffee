@@ -162,7 +162,6 @@ class TermView extends View
 
     @resize cols, rows
     @term.resize cols, rows
-    atom.views.getView(atom.workspace).style.overflow = 'visible'
 
   getDimensions: ->
     fakeRow = $("<div><span>&nbsp;</span></div>").css visibility: 'hidden'
