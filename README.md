@@ -1,4 +1,4 @@
-# Atom Term 2
+# Atom Term 3
 
 Run shell sessions within Atom Editor using `term2` package.
 Run **Vim, Emacs, Htop, etc.** in Atom.
@@ -9,15 +9,7 @@ _It's a fork and rebuilt version of "[Term](http://atom.io/packages/term)" packa
 
 ## What about this fork ?!
 
-This fork adds a 'ShellOverride' configuration option which allows to override
-the shell Term2 is using (your default shell).
-
-If your default shell is zsh you see that it's not yet fully compatible with
-Term2 (scrolling might not work):
-setting ShellOverride to i.e. 'bash' let you use Term2 with another (working)
-shell without messing up with your default shell configuration.
-
-The fork was focused on this option in the first place but evolved a lot since.
+This fork fixes some bugs in upstream including both visual and crashes.
 
 To install **Term2** easily into your Atom:
 
