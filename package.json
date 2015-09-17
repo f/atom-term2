@@ -25,5 +25,10 @@
     "keypather": "^1.3.2",
     "pty.js": "^0.2.13",
     "event-kit": "1.3.x"
+  },
+  "devDependencies": {
+    "eslint": "1.x",
+    "eslint-config-floobits": "*",
+    "eslint-plugin-react": "3.x"
   }
 }
