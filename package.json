@@ -3,15 +3,7 @@
   "main": "./index",
   "version": "0.9.20",
   "description": "You can run shell sessions within Atom Editor using Term 2 package. You can run **Vim, Emacs, Htop, etc.** in your Atom. It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power of Atom Package environment.",
-  "activationCommands": {
-    "atom-workspace": [
-      "term2:open",
-      "term2:open-split-left",
-      "term2:open-split-up",
-      "term2:open-split-right",
-      "term2:open-split-down"
-    ]
-  },
+
   "repository": "https://github.com/f/atom-term2",
   "license": "MIT",
   "engines": {
@@ -23,12 +15,22 @@
     "debounce": "0.0.3",
     "fs-plus": "^2.2.3",
     "keypather": "^1.3.2",
-    "pty.js": "^0.2.13",
-    "event-kit": "1.3.x"
+    "flukes": "0.1.x",
+    "pty.js": "0.3.x",
+    "event-kit": "1.3.x",
+    "react-atom-fork": "0.11.x",
+    "react-tools": "0.11.x",
+    "reactionary-atom-fork": "1.x"
   },
   "devDependencies": {
     "eslint": "1.x",
     "eslint-config-floobits": "*",
     "eslint-plugin-react": "3.x"
+  },
+  "scripts": {
+    "build": "npm run install",
+    "lint": "eslint lib",
+    "watch": "jsx --watch --harmony templates lib/build",
+    "install": "jsx --harmony templates lib/build"
   }
 }

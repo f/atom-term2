@@ -3,9 +3,22 @@
 
 var React = require("react-atom-fork");
 var flux = require("flukes");
+var terminals = require("../terminal-model");
+
+var TerminalView = React.createClass({
+  onMouseDown: function (e) {
+    this.props.terminal.open();
+  },
+  render: function () {
+    const t = this.props.terminal;
+    return (
+      <li onMouseDown={this.onMouseDown.bind(this, t.id)} >tty-{t.title}</li>
+    );
+  }
+});
 
 var ListView = React.createClass({
-  mixins: [flux.createAutoBinder(["terminals"])],
+  mixins: [flux.createAutoBinder([], [terminals])],
   openTerm: function (id) {
     if (id in this.openTerminals) {
       var pane = this.openTerminals[id];
@@ -15,17 +28,15 @@ var ListView = React.createClass({
       return;
     }
   },
-  onMouseDown: function (tty, e) {
-    editorAction.open_term(tty);
-  },
   render: function () {
+    const terms = terminals.map(function (t) {
+      return (<TerminalView terminal={t} key={t.id} />);
+    });
     return (
       <div className="header">
         <span className=""><i className="icon icon-terminal"></i>terminals</span>
-        <ul onMouseDown={this.onMouseDown}>
-          {this.props.terminals && this.props.terminals.map(function (t) {
-            return <li onMouseDown={this.onMouseDown.bind(this, t.id)} >tty-{t.username}</li>;
-          }.bind(this))}
+        <ul>
+          {terms}
         </ul>
       </div>
     );

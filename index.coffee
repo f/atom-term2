@@ -1,6 +1,9 @@
 path = require 'path'
-TermView = require './lib/TermView'
+TermView = require './lib/term-view'
+ListView = require './lib/build/list-view'
+Terminals = require './lib/terminal-model'
 keypather  = do require 'keypather'
+
 
 capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 
@@ -100,13 +103,17 @@ module.exports =
         default: false
 
     activate: (@state)->
-
       ['up', 'right', 'down', 'left'].forEach (direction)=>
         atom.commands.add "atom-workspace", "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
 
       atom.commands.add "atom-workspace", "term2:open", @newTerm.bind(this)
       atom.commands.add "atom-workspace", "term2:pipe-path", @pipeTerm.bind(this, 'path')
       atom.commands.add "atom-workspace", "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
+
+      atom.packages.activatePackage('tree-view').then (treeViewPkg) =>
+        node = new ListView()
+        treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
+        @newTerm()
 
     getColors: ->
       {
@@ -153,7 +160,7 @@ module.exports =
       @termViews.push? termView
       termView
 
-    splitTerm: (direction)->
+    splitTerm: (direction) ->
       openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
       termView = @createTermView()
       termView.on "click", =>
@@ -187,11 +194,17 @@ module.exports =
     newTerm: (args...) ->
       termView = @createTermView args...
       pane = atom.workspace.getActivePane()
+      Terminals.add {
+        local: true,
+        term: termView,
+        title: 'terminal',
+        pane: pane
+      }
       item = pane.addItem termView
       pane.activateItem item
       termView
 
-    pipeTerm: (action)->
+    pipeTerm: (action) ->
       editor = @getActiveEditor()
       stream = switch action
         when 'path'
