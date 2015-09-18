@@ -53,14 +53,11 @@ class TermView extends View
     @resizeToPane()
     @focusTerm()
 
-  # forkPtyProcess: (sh, args=[])->
-  #   processPath = require.resolve './pty'
-  #   path = atom.project.getPaths()[0] ? '~'
-  #   Task.once processPath, fs.absolute(path), sh, args
-
-  initialize: (@state)->
+  attached: () ->
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg) -> arg
+
+    {cols, rows} = @getDimensions()
 
     @term = term = new Terminal {
       useStyle: no
@@ -97,11 +94,7 @@ class TermView extends View
 
     @applyStyle()
     @attachEvents()
-    process.nextTick =>
-      @resize(130, 38)
-      @resize(150, 38)
-      @resize(130, 38)
-      # @resizeToPane()
+
     window.TermView = this
 
   resize: (cols, rows) ->
@@ -193,7 +186,6 @@ class TermView extends View
     @term.focus()
 
   resizeToPane: ->
-    return
     # return if not @ptyProcess?
     {cols, rows} = @getDimensions()
     return unless cols > 0 and rows > 0
@@ -203,7 +195,7 @@ class TermView extends View
   getDimensions: ->
     if not @term
       cols = Math.floor @width() / 7
-      rows = Math.floor @height() / 14
+      rows = Math.floor @height() / 15
       return {cols, rows}
 
     @find('.terminal').append @fakeRow
