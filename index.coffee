@@ -200,12 +200,15 @@ module.exports =
   newTerm: (args...) ->
     termView = @createTermView args...
     pane = atom.workspace.getActivePane()
-    Terminals.add {
+    model = Terminals.add {
       local: true,
       term: termView,
       title: 'terminal',
       pane: pane
     }
+    id = model.id
+    termView.onExit () ->
+      Terminals.remove id
     item = pane.addItem termView
     pane.activateItem item
     termView
