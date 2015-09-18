@@ -65,8 +65,6 @@ class TermView extends View
       colors, cursorBlink, scrollback, cols, rows
     }
 
-    term.end = => @destroy()
-
     term.on "data", (data) => @input data
     term.open this.get(0)
 
@@ -84,18 +82,17 @@ class TermView extends View
         @emitter.emit('data', data)
         @term.write data
 
-      @ptyProcess.on 'exit', ->
+      @ptyProcess.on 'exit', (data) =>
         @emitter.emit('exit', data)
-        @destroy()
+        @exit()
+    else
+      term.end = => @exit()
 
     @input "#{runCommand}#{os.EOL}" if (runCommand)
-
     term.focus()
-
     @applyStyle()
     @attachEvents()
-
-    window.TermView = this
+    @resizeToPane
 
   resize: (cols, rows) ->
     return if @term.rows is rows and @term.cols is cols
@@ -170,11 +167,7 @@ class TermView extends View
   attachResizeEvents: ->
     @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane()
-    atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
-
-  detachResizeEvents: ->
-    @off 'focus', @focus
-    $(window).off 'resize'
+    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
 
   focus: ->
     @resizeToPane()
@@ -205,15 +198,22 @@ class TermView extends View
     @fakeRow.remove()
     {cols, rows}
 
+  exit: ->
+    pane = atom.workspace.getActivePane()
+    pane.destroyItem(this);
+
   destroy: ->
-    @detachResizeEvents()
+    @off 'focus', @focus
+    $(window).off 'resize', @resizeToPane
     if @ptyProcess
-      @ptyProcess.terminate()
-    @term.destroy()
-    parentPane = atom.workspace.getActivePane()
-    if parentPane.activeItem is this
-      parentPane.removeItem parentPane.activeItem
-    @detach()
+      @ptyProcess.kill()
+      @ptyProcess = null
+    if @term
+      @term.destroy()
+      @term = null
+    if @disposable
+      @disposable.dispose()
+      @disposable = null
 
 
 module.exports = TermView
