@@ -60,8 +60,11 @@ class TermView extends View
     args = shellArguments.split(/\s+/g).filter (arg) -> arg
 
     if @opts.forkPTY
+
+
       @ptyProcess = @forkPtyProcess shellOverride, args
       @ptyProcess.on 'term2:data', (data) =>
+        console.log('tty', data)
         @emitter.emit('data', data)
         @term.write data
       @ptyProcess.on 'term2:exit', (data) =>
@@ -87,12 +90,16 @@ class TermView extends View
     @attachEvents()
     @resizeToPane()
 
+    window.TermView = this
+
   resize: (cols, rows) ->
     return if @term.rows is rows and @term.cols is cols
-
+    console.log @term.rows, @term.cols, "->", cols, rows
     try
+
       if @ptyProcess
         @ptyProcess.send {event: 'resize', rows, cols}
+
       if @term
         @term.resize cols, rows
     catch error
@@ -155,7 +162,6 @@ class TermView extends View
     @input atom.clipboard.read()
 
   attachResizeEvents: ->
-    setTimeout (=>  @resizeToPane()), 10
     @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane()
     atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
@@ -191,7 +197,6 @@ class TermView extends View
     cols = Math.floor (@width() / fakeCol.width()) or 9
     rows = Math.floor (@height() / fakeCol.height()) or 16
     @fakeRow.remove()
-
     {cols, rows}
 
   destroy: ->

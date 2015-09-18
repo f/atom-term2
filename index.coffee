@@ -115,7 +115,7 @@ module.exports =
         treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
         @newTerm()
 
-    getColors: ->
+    getColors_: ->
       {
         normalBlack, normalRed, normalGreen, normalYellow
         normalBlue, normalPurple, normalCyan, normalWhite
@@ -131,6 +131,9 @@ module.exports =
         background, foreground
       ].map (color) -> color.toHexString()
 
+    getTerminals: =>
+      Terminals
+
     createTermView: (forkPTY=true, rows=16, cols=9)->
       opts =
         runCommand    : atom.config.get 'term2.autoRunCommand'
@@ -140,7 +143,7 @@ module.exports =
         cursorBlink   : atom.config.get 'term2.cursorBlink'
         fontFamily    : atom.config.get 'term2.fontFamily'
         fontSize      : atom.config.get 'term2.fontSize'
-        colors        : @getColors()
+        colors        : @getColors_()
         forkPTY       : forkPTY
         rows          : rows
         cols          : cols
@@ -226,7 +229,7 @@ module.exports =
       @termViews.splice @termViews.indexOf(termView), 1
 
     deactivate:->
-      @termViews.forEach (view)-> view.deactivate()
+      @termViews.forEach (view) -> view.deactivate()
 
     serialize:->
       termViewsState = this.termViews.map (view)-> view.serialize()
