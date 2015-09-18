@@ -1,3 +1,4 @@
+pty = require 'pty.js'
 util       = require 'util'
 path       = require 'path'
 os         = require 'os'
@@ -40,9 +41,11 @@ class TermView extends View
 
 
   input: (data) ->
+    console.log("in", data)
     try
       if @ptyProcess
-        @ptyProcess.send event: 'input', text: data
+        @ptyProcess.write(data)
+        # @ptyProcess.send event: 'input', text: data
       else
         @term.write data
     catch error
@@ -50,26 +53,14 @@ class TermView extends View
     @resizeToPane()
     @focusTerm()
 
-  forkPtyProcess: (sh, args=[])->
-    processPath = require.resolve './pty'
-    path = atom.project.getPaths()[0] ? '~'
-    Task.once processPath, fs.absolute(path), sh, args
+  # forkPtyProcess: (sh, args=[])->
+  #   processPath = require.resolve './pty'
+  #   path = atom.project.getPaths()[0] ? '~'
+  #   Task.once processPath, fs.absolute(path), sh, args
 
   initialize: (@state)->
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg) -> arg
-
-    if @opts.forkPTY
-
-
-      @ptyProcess = @forkPtyProcess shellOverride, args
-      @ptyProcess.on 'term2:data', (data) =>
-        console.log('tty', data)
-        @emitter.emit('data', data)
-        @term.write data
-      @ptyProcess.on 'term2:exit', (data) =>
-        @emitter.emit('exit', data)
-        @destroy()
 
     @term = term = new Terminal {
       useStyle: no
@@ -82,23 +73,45 @@ class TermView extends View
     term.on "data", (data) => @input data
     term.open this.get(0)
 
-    @input "#{runCommand}#{os.EOL}" if (runCommand and @ptyProcess)
+    if @opts.forkPTY
+      shell = shell or process.env.SHELL
+      @ptyProcess = pty.spawn shell, args,
+        name: 'xterm-256color'
+        cols: cols
+        rows: rows
+        cwd: atom.project.getPaths()[0] || '~'
+        env: process.env
+
+      @ptyProcess.on 'data', (data) =>
+        console.log('tty', data)
+        @emitter.emit('data', data)
+        @term.write data
+
+      @ptyProcess.on 'exit', ->
+        @emitter.emit('exit', data)
+        @destroy()
+
+    @input "#{runCommand}#{os.EOL}" if (runCommand)
 
     term.focus()
 
     @applyStyle()
     @attachEvents()
-    @resizeToPane()
-
+    process.nextTick =>
+      @resize(130, 38)
+      @resize(150, 38)
+      @resize(130, 38)
+      # @resizeToPane()
     window.TermView = this
 
   resize: (cols, rows) ->
     return if @term.rows is rows and @term.cols is cols
-    console.log @term.rows, @term.cols, "->", cols, rows
+    console.log @term.rows, @term.cols, "->", rows, cols
     try
 
       if @ptyProcess
-        @ptyProcess.send {event: 'resize', rows, cols}
+        @ptyProcess.resize cols, rows
+        # @ptyProcess.send {event: 'resize', rows, cols}
 
       if @term
         @term.resize cols, rows
@@ -180,6 +193,7 @@ class TermView extends View
     @term.focus()
 
   resizeToPane: ->
+    return
     # return if not @ptyProcess?
     {cols, rows} = @getDimensions()
     return unless cols > 0 and rows > 0
