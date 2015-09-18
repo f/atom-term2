@@ -135,9 +135,11 @@ module.exports =
       @newTerm()
 
   getTerminals: =>
-    Terminals
+    Terminals.map (t) ->
+      t.term
 
-  createTermView: (forkPTY=true, rows=16, cols=9) ->
+
+  createTermView: (forkPTY=true, rows=30, cols=80) ->
     opts =
       runCommand    : atom.config.get 'term2.autoRunCommand'
       shellOverride : atom.config.get 'term2.shellOverride'
@@ -207,6 +209,7 @@ module.exports =
       pane: pane
     }
     id = model.id
+    termView.id = id
     termView.onExit () ->
       Terminals.remove id
     item = pane.addItem termView

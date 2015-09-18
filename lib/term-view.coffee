@@ -41,15 +41,13 @@ class TermView extends View
 
 
   input: (data) ->
-    console.log("in", data)
     try
       if @ptyProcess
         @ptyProcess.write(data)
-        # @ptyProcess.send event: 'input', text: data
       else
         @term.write data
     catch error
-      console.log error
+      console.error error
     @resizeToPane()
     @focusTerm()
 
@@ -57,7 +55,8 @@ class TermView extends View
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg) -> arg
 
-    {cols, rows} = @getDimensions()
+    if @opts.forkPTY
+      {cols, rows} = @getDimensions_()
 
     @term = term = new Terminal {
       useStyle: no
@@ -78,7 +77,6 @@ class TermView extends View
         env: process.env
 
       @ptyProcess.on 'data', (data) =>
-        console.log('tty', data)
         @emitter.emit('data', data)
         @term.write data
 
@@ -106,7 +104,7 @@ class TermView extends View
       if @term
         @term.resize cols, rows
     catch error
-      console.log error
+      console.error error
       return
 
     @emitter.emit 'resize', cols, rows
@@ -180,12 +178,17 @@ class TermView extends View
 
   resizeToPane: ->
     # return if not @ptyProcess?
-    {cols, rows} = @getDimensions()
+    {cols, rows} = @getDimensions_()
     return unless cols > 0 and rows > 0
     return unless @term
     @resize cols, rows
 
   getDimensions: ->
+    cols = @term.cols
+    rows = @term.rows
+    {cols, rows}
+
+  getDimensions_: ->
     if not @term
       cols = Math.floor @width() / 7
       rows = Math.floor @height() / 15
