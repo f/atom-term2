@@ -208,6 +208,13 @@ module.exports =
       title: 'terminal',
       pane: pane
     }
+    # pane.onDidChangeActiveItem ->
+    #   activeItem = pane.getActiveItem()
+    #   if activeItem == termView
+    #     process.nextTick ->
+    #       termView.find(".terminal").focus()
+    #       termView.focus()
+
     id = model.id
     termView.id = id
     termView.onExit () ->
