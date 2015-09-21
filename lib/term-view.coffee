@@ -93,14 +93,13 @@ class TermView extends View
     @resizeToPane
 
   resize: (cols, rows) ->
+    return unless @term
     return if @term.rows is rows and @term.cols is cols
+    return unless cols > 0 and rows > 0 and isFinite(cols) append isFinite(rows)
     console.log @term.rows, @term.cols, "->", rows, cols
     try
-
       if @ptyProcess
         @ptyProcess.resize cols, rows
-        # @ptyProcess.send {event: 'resize', rows, cols}
-
       if @term
         @term.resize cols, rows
     catch error
@@ -177,8 +176,6 @@ class TermView extends View
   resizeToPane: ->
     # return if not @ptyProcess?
     {cols, rows} = @getDimensions_()
-    return unless cols > 0 and rows > 0
-    return unless @term
     @resize cols, rows
 
   getDimensions: ->

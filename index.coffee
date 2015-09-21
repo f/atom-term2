@@ -208,17 +208,26 @@ module.exports =
       title: 'terminal',
       pane: pane
     }
-    # pane.onDidChangeActiveItem ->
-    #   activeItem = pane.getActiveItem()
-    #   if activeItem == termView
-    #     process.nextTick ->
-    #       termView.find(".terminal").focus()
-    #       termView.focus()
+
+    disposable = pane.onDidChangeActiveItem ->
+      activeItem = pane.getActiveItem()
+      if activeItem != termView
+        return termView.term.constructor._textarea = null
+
+      process.nextTick ->
+        termView.element.focus()
+        # HACK!
+        # so, term.js allows for a special _textarea because of iframe shenanigans,
+        # but, it is the constructor instead of the instance!!!1 - probably to avoid having to bind this as a premature
+        # optimization.
+        atomPane = activeItem.parentsUntil("atom-pane").parent()[0]
+        termView.term.constructor._textarea = atomPane
 
     id = model.id
     termView.id = id
     termView.onExit () ->
       Terminals.remove id
+      disposable.dispose()
     item = pane.addItem termView
     pane.activateItem item
     termView
