@@ -95,7 +95,7 @@ class TermView extends View
   resize: (cols, rows) ->
     return unless @term
     return if @term.rows is rows and @term.cols is cols
-    return unless cols > 0 and rows > 0 and isFinite(cols) append isFinite(rows)
+    return unless cols > 0 and rows > 0 and isFinite(cols) and isFinite(rows)
     console.log @term.rows, @term.cols, "->", rows, cols
     try
       if @ptyProcess
