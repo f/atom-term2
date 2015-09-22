@@ -41,9 +41,6 @@ class TermView extends View
   onResize: (callback) ->
     @emitter.on 'resize', callback
 
-  forkPtyProcess: (sh, args=[])->
-
-
   input: (data) ->
     try
       if @ptyProcess
@@ -54,7 +51,7 @@ class TermView extends View
     catch error
       console.error error
     @resizeToPane()
-    # @focusTerm()
+    @focusTerm()
 
   attached: () ->
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
@@ -81,7 +78,6 @@ class TermView extends View
 
       @ptyProcess.on 'term2:data', (data) =>
         utf8 = new Buffer(data, "base64").toString("utf-8")
-        console.log 'pty', utf8
         @term.write utf8
         @emitter.emit('data', data)
 
@@ -144,7 +140,9 @@ class TermView extends View
 
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
-    @attachResizeEvents()
+    @on 'focus', @focus
+    $(window).on 'resize', => @resizeToPane()
+    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
     atom.commands.add "atom-workspace", "term2:paste", => @paste()
     atom.commands.add "atom-workspace", "term2:copy", => @copy()
 
@@ -164,11 +162,6 @@ class TermView extends View
 
   paste: ->
     @input atom.clipboard.read()
-
-  attachResizeEvents: ->
-    @on 'focus', @focus
-    $(window).on 'resize', => @resizeToPane()
-    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
 
   focus: ->
     @resizeToPane()
