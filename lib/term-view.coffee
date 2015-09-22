@@ -6,6 +6,8 @@ fs         = require 'fs-plus'
 
 debounce   = require 'debounce'
 Terminal   = require 'atom-term.js'
+ # see https://github.com/f/atom-term.js/pull/5
+ # see https://github.com/f/atom-term.js/pull/4
 window.isMac = window.navigator.userAgent.indexOf('Mac') != -1;
 
 {Task} = require 'atom'
