@@ -225,9 +225,14 @@ module.exports =
 
     id = model.id
     termView.id = id
+
     termView.onExit () ->
       Terminals.remove id
       disposable.dispose()
+
+    termView.onDidChangeTitle () ->
+      model.title = termView.getTitle()
+
     item = pane.addItem termView
     pane.activateItem item
     termView

@@ -1,4 +1,3 @@
-pty = require 'pty.js'
 util       = require 'util'
 path       = require 'path'
 os         = require 'os'
@@ -16,9 +15,9 @@ window.isMac = window.navigator.userAgent.indexOf('Mac') != -1;
 
 last = (str)-> str[str.length-1]
 
-renderTemplate = (template, data)->
+renderTemplate = (template, data) ->
   vars = Object.keys data
-  vars.reduce (_template, key)->
+  vars.reduce (_template, key) ->
     _template.split(///\{\{\s*#{key}\s*\}\}///)
       .join data[key]
   , template.toString()
@@ -67,6 +66,10 @@ class TermView extends View
     }
 
     term.on "data", (data) => @input data
+    term.on "title", (title) =>
+      @title_ = title
+      @emitter.emit 'did-change-title', title
+
     term.open this.get(0)
 
     if not @opts.forkPTY
@@ -115,9 +118,13 @@ class TermView extends View
     home    : process.env.HOME
 
   getTitle: ->
+    return @title_ if @title_
     @vars = @titleVars()
     titleTemplate = @opts.titleTemplate or "({{ bashName }})"
     renderTemplate titleTemplate, @vars
+
+  onDidChangeTitle: (callback) ->
+    @emitter.on 'did-change-title', callback
 
   getIconName: ->
     "terminal"
