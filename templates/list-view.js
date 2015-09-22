@@ -12,7 +12,10 @@ var TerminalView = React.createClass({
   render: function () {
     const t = this.props.terminal;
     return (
-      <li onMouseDown={this.onMouseDown.bind(this, t.id)} >tty-{t.title}</li>
+      <li onMouseDown={this.onMouseDown.bind(this, t.id)}>
+        <i className="icon icon-terminal"></i>
+        tty-{t.title}
+      </li>
     );
   }
 });
