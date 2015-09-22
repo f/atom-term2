@@ -1,8 +1,7 @@
 util       = require 'util'
-path       = require 'path'
 os         = require 'os'
 fs         = require 'fs-plus'
-
+path       = require 'path'
 debounce   = require 'debounce'
 Terminal   = require 'atom-term.js'
  # see https://github.com/f/atom-term.js/pull/5
@@ -67,6 +66,20 @@ class TermView extends View
 
     term.on "data", (data) => @input data
     term.on "title", (title) =>
+      if title.length > 20
+        split = title.split(path.sep)
+        newTitle = ""
+        if split[0] == ""
+          split.shift(1)
+
+        if split.length == 1
+          title = title.slice(0, 10) + "..." + title.slice(-10)
+        else
+          title = path.sep + [split[0], "...", split[split.length - 1]].join(path.sep)
+          if title.length > 25
+            title = path.sep + [split[0], split[split.length - 1]].join(path.sep)
+            title = title.slice(0, 10) + "..." + title.slice(-10)
+
       @title_ = title
       @emitter.emit 'did-change-title', title
 
@@ -76,8 +89,7 @@ class TermView extends View
       term.end = => @exit()
     else
       processPath = require.resolve './pty'
-      path = atom.project.getPaths()[0] ? '~'
-      @ptyProcess = Task.once processPath, fs.absolute(path), shellOverride, cols, rows, args
+      @ptyProcess = Task.once processPath, fs.absolute(atom.project.getPaths()[0] ? '~'), shellOverride, cols, rows, args
 
       @ptyProcess.on 'term2:data', (data) =>
         utf8 = new Buffer(data, "base64").toString("utf-8")

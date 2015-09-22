@@ -199,13 +199,13 @@ module.exports =
     else
       splitter()
 
-  newTerm: (args...) ->
-    termView = @createTermView args...
+  newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
+    termView = @createTermView {forkPTY, rows, cols}
     pane = atom.workspace.getActivePane()
     model = Terminals.add {
-      local: true,
+      local: !!forkPTY,
       term: termView,
-      title: 'terminal',
+      title: title,
       pane: pane
     }
 
@@ -231,7 +231,10 @@ module.exports =
       disposable.dispose()
 
     termView.onDidChangeTitle () ->
-      model.title = termView.getTitle()
+      if forkPTY
+        model.title = termView.getTitle()
+      else
+        model.title = title + '-' + termView.getTitle()
 
     item = pane.addItem termView
     pane.activateItem item
