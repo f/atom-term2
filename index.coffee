@@ -215,7 +215,7 @@ module.exports =
         return termView.term.constructor._textarea = null
 
       process.nextTick ->
-        termView.element.focus()
+        termView.focus()
         # HACK!
         # so, term.js allows for a special _textarea because of iframe shenanigans,
         # but, it is the constructor instead of the instance!!!1 - probably to avoid having to bind this as a premature
