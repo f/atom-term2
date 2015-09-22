@@ -132,7 +132,7 @@ module.exports =
     atom.packages.activatePackage('tree-view').then (treeViewPkg) =>
       node = new ListView()
       treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
-      @newTerm()
+      # @newTerm()
 
   getTerminals: =>
     Terminals.map (t) ->
@@ -200,7 +200,7 @@ module.exports =
       splitter()
 
   newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
-    termView = @createTermView {forkPTY, rows, cols}
+    termView = @createTermView forkPTY, rows, cols
     pane = atom.workspace.getActivePane()
     model = Terminals.add {
       local: !!forkPTY,
@@ -212,7 +212,9 @@ module.exports =
     disposable = pane.onDidChangeActiveItem ->
       activeItem = pane.getActiveItem()
       if activeItem != termView
-        return termView.term.constructor._textarea = null
+        if termView.term
+          termView.term.constructor._textarea = null
+        return
 
       process.nextTick ->
         termView.focus()
@@ -221,7 +223,8 @@ module.exports =
         # but, it is the constructor instead of the instance!!!1 - probably to avoid having to bind this as a premature
         # optimization.
         atomPane = activeItem.parentsUntil("atom-pane").parent()[0]
-        termView.term.constructor._textarea = atomPane
+        if termView.term
+          termView.term.constructor._textarea = atomPane
 
     id = model.id
     termView.id = id
