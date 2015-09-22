@@ -48,7 +48,7 @@ class TermView extends View
         @term.write data
     catch error
       console.error error
-    @resizeToPane()
+    @resizeToPane_()
     @focusTerm()
 
   attached: () ->
@@ -105,7 +105,7 @@ class TermView extends View
     term.focus()
     @applyStyle()
     @attachEvents()
-    @resizeToPane
+    @resizeToPane_
 
   resize: (cols, rows) ->
     return unless @term
@@ -158,10 +158,10 @@ class TermView extends View
     ) + "px"
 
   attachEvents: ->
-    @resizeToPane = @resizeToPane.bind this
+    @resizeToPane_ = @resizeToPane_.bind this
     @on 'focus', @focus
-    $(window).on 'resize', => @resizeToPane()
-    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane()), 300
+    $(window).on 'resize', => @resizeToPane_()
+    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane_()), 300
     atom.commands.add "atom-workspace", "term2:paste", => @paste()
     atom.commands.add "atom-workspace", "term2:copy", => @copy()
 
@@ -183,13 +183,14 @@ class TermView extends View
     @input atom.clipboard.read()
 
   focus: ->
-    @resizeToPane()
+    @resizeToPane_()
     @focusTerm()
 
   focusTerm: ->
     @term.focus()
 
-  resizeToPane: ->
+  resizeToPane_: ->
+    return unless @ptyProcess
     {cols, rows} = @getDimensions_()
     @resize cols, rows
 
@@ -217,7 +218,7 @@ class TermView extends View
 
   destroy: ->
     @off 'focus', @focus
-    $(window).off 'resize', @resizeToPane
+    $(window).off 'resize', @resizeToPane_
     if @ptyProcess
       @ptyProcess.terminate()
       @ptyProcess = null
