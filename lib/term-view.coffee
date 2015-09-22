@@ -41,17 +41,20 @@ class TermView extends View
   onResize: (callback) ->
     @emitter.on 'resize', callback
 
+  forkPtyProcess: (sh, args=[])->
+
 
   input: (data) ->
     try
       if @ptyProcess
-        @ptyProcess.write(data)
+        base64ed = new Buffer(data).toString("base64")
+        @ptyProcess.send event: 'input', text: base64ed
       else
         @term.write data
     catch error
       console.error error
     @resizeToPane()
-    @focusTerm()
+    # @focusTerm()
 
   attached: () ->
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
@@ -69,24 +72,23 @@ class TermView extends View
     term.on "data", (data) => @input data
     term.open this.get(0)
 
-    if @opts.forkPTY
-      shell = shell or process.env.SHELL
-      @ptyProcess = pty.spawn shell, args,
-        name: 'xterm-256color'
-        cols: cols
-        rows: rows
-        cwd: atom.project.getPaths()[0] || '~'
-        env: process.env
+    if not @opts.forkPTY
+      term.end = => @exit()
+    else
+      processPath = require.resolve './pty'
+      path = atom.project.getPaths()[0] ? '~'
+      @ptyProcess = Task.once processPath, fs.absolute(path), shellOverride, cols, rows, args
 
-      @ptyProcess.on 'data', (data) =>
+      @ptyProcess.on 'term2:data', (data) =>
+        utf8 = new Buffer(data, "base64").toString("utf-8")
+        console.log 'pty', utf8
+        @term.write utf8
         @emitter.emit('data', data)
-        @term.write data
 
-      @ptyProcess.on 'exit', (data) =>
+      @ptyProcess.on 'term2:exit', (data) =>
         @emitter.emit('exit', data)
         @exit()
-    else
-      term.end = => @exit()
+
 
     @input "#{runCommand}#{os.EOL}" if (runCommand)
     term.focus()
@@ -101,7 +103,7 @@ class TermView extends View
     console.log @term.rows, @term.cols, "->", rows, cols
     try
       if @ptyProcess
-        @ptyProcess.resize cols, rows
+        @ptyProcess.send {event: 'resize', rows, cols}
       if @term
         @term.resize cols, rows
     catch error
@@ -176,7 +178,6 @@ class TermView extends View
     @term.focus()
 
   resizeToPane: ->
-    # return if not @ptyProcess?
     {cols, rows} = @getDimensions_()
     @resize cols, rows
 
@@ -206,7 +207,7 @@ class TermView extends View
     @off 'focus', @focus
     $(window).off 'resize', @resizeToPane
     if @ptyProcess
-      @ptyProcess.kill()
+      @ptyProcess.terminate()
       @ptyProcess = null
     if @term
       @term.destroy()
