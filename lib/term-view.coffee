@@ -39,6 +39,12 @@ class TermView extends View
   onResize: (callback) ->
     @emitter.on 'resize', callback
 
+  onSTDIN: (callback) ->
+    @emitter.on 'stdin', callback
+
+  onSTDOUT: (callback) ->
+    @emitter.on 'stdout', callback
+
   input: (data) ->
     try
       if @ptyProcess
@@ -61,10 +67,17 @@ class TermView extends View
     @term = term = new Terminal {
       useStyle: no
       screenKeys: no
+      handler: (data) =>
+        @emitter.emit 'stdin', data
       colors, cursorBlink, scrollback, cols, rows
     }
 
-    term.on "data", (data) => @input data
+    term.on "data", (data) =>
+      @emitter.emit 'stdout', data
+      # let the remote term write to stdin - we slurp up its stdout
+      if @ptyProcess
+        @input data
+
     term.on "title", (title) =>
       if title.length > 20
         split = title.split(path.sep)
