@@ -232,7 +232,6 @@ module.exports =
 
     subscriptions.add termView.onExit () ->
       Terminals.remove id
-      disposable.dispose()
 
     subscriptions.add termView.onDidChangeTitle () ->
       if forkPTY
