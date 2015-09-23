@@ -5,16 +5,15 @@ Run **Vim, Emacs, Htop, etc.** in Atom.
 It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power
 of Atom Package environment.
 
-_It's a fork and rebuilt version of "[Term2](http://atom.io/packages/term2)" package._
-_Which was a fork and rebuilt version of "[Term](http://atom.io/packages/term)" package._
+_Term3 is a fork and rebuilt version of [Term2](http://atom.io/packages/term2) package which was a fork of [Term](http://atom.io/packages/term) package._
 
-## What is Term3 a thing ?!
+## Why is Term3 a thing ?!
 
 This fork fixes some bugs in upstream including the [isMac](https://github.com/f/atom-term.js/pull/4) bug.
 Term3 adds a terminal list above the treeview list.
-Term3 also adds an API for other plugins, like [Floobits](https://github.com/Floobits/floobits-atom) so you can pair on your terminals in addition to your code.
+Term3 also adds an API for other plugins, like [Floobits](https://github.com/Floobits/floobits-atom), so you can pair on your terminals in addition to your code.
 
-To install **Term3** easily into your Atom:
+To install **Term3**
 
 ```console
 $ apm install term3
