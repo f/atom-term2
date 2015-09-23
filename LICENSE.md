@@ -1,4 +1,4 @@
-Copyright (c) 2014 webBox.io
+Copyright (c) 2015 Floobits
 
 Term package copyright (c) 2014 Tejesh Mehta
 
