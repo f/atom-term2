@@ -15,7 +15,7 @@ getColors = ->
     brightBlack, brightRed, brightGreen, brightYellow
     brightBlue, brightPurple, brightCyan, brightWhite
     background, foreground
-  } = (atom.config.getAll 'term2.colors')[0].value
+  } = (atom.config.getAll 'term3.colors')[0].value
   [
     normalBlack, normalRed, normalGreen, normalYellow
     normalBlue, normalPurple, normalCyan, normalWhite
@@ -123,11 +123,11 @@ module.exports =
 
   activate: (@state)->
     ['up', 'right', 'down', 'left'].forEach (direction) =>
-      atom.commands.add "atom-workspace", "term2:open-split-#{direction}", @splitTerm.bind(this, direction)
+      atom.commands.add "atom-workspace", "term3:open-split-#{direction}", @splitTerm.bind(this, direction)
 
-    atom.commands.add "atom-workspace", "term2:open", @newTerm.bind(this)
-    atom.commands.add "atom-workspace", "term2:pipe-path", @pipeTerm.bind(this, 'path')
-    atom.commands.add "atom-workspace", "term2:pipe-selection", @pipeTerm.bind(this, 'selection')
+    atom.commands.add "atom-workspace", "term3:open", @newTerm.bind(this)
+    atom.commands.add "atom-workspace", "term3:pipe-path", @pipeTerm.bind(this, 'path')
+    atom.commands.add "atom-workspace", "term3:pipe-selection", @pipeTerm.bind(this, 'selection')
 
     atom.packages.activatePackage('tree-view').then (treeViewPkg) =>
       node = new ListView()
@@ -141,13 +141,13 @@ module.exports =
 
   createTermView: (forkPTY=true, rows=30, cols=80) ->
     opts =
-      runCommand    : atom.config.get 'term2.autoRunCommand'
-      shellOverride : atom.config.get 'term2.shellOverride'
-      shellArguments: atom.config.get 'term2.shellArguments'
-      titleTemplate : atom.config.get 'term2.titleTemplate'
-      cursorBlink   : atom.config.get 'term2.cursorBlink'
-      fontFamily    : atom.config.get 'term2.fontFamily'
-      fontSize      : atom.config.get 'term2.fontSize'
+      runCommand    : atom.config.get 'term3.autoRunCommand'
+      shellOverride : atom.config.get 'term3.shellOverride'
+      shellArguments: atom.config.get 'term3.shellArguments'
+      titleTemplate : atom.config.get 'term3.titleTemplate'
+      cursorBlink   : atom.config.get 'term3.cursorBlink'
+      fontFamily    : atom.config.get 'term3.fontFamily'
+      fontSize      : atom.config.get 'term3.fontSize'
       colors        : getColors()
       forkPTY       : forkPTY
       rows          : rows
@@ -169,7 +169,7 @@ module.exports =
     termView
 
   splitTerm: (direction) ->
-    openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
+    openPanesInSameSplit = atom.config.get 'term3.openPanesInSameSplit'
     termView = @createTermView()
     termView.on "click", =>
 

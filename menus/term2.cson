@@ -8,11 +8,11 @@
   'submenu': [
     'label': 'Term 2'
     'submenu': [
-      {'label': 'Open New Terminal in New Tab', 'command': 'term2:open'}
-      {'label': 'Open New Terminal in Right Pane', 'command': 'term2:open-split-right'}
-      {'label': 'Open New Terminal in Bottom Pane', 'command': 'term2:open-split-down'}
-      {'label': 'Open New Terminal in Top Pane', 'command': 'term2:open-split-up'}
-      {'label': 'Open New Terminal in Left Pane', 'command': 'term2:open-split-left'}
+      {'label': 'Open New Terminal in New Tab', 'command': 'term3:open'}
+      {'label': 'Open New Terminal in Right Pane', 'command': 'term3:open-split-right'}
+      {'label': 'Open New Terminal in Bottom Pane', 'command': 'term3:open-split-down'}
+      {'label': 'Open New Terminal in Top Pane', 'command': 'term3:open-split-up'}
+      {'label': 'Open New Terminal in Left Pane', 'command': 'term3:open-split-left'}
     ]
   ]
 ]
@@ -20,21 +20,21 @@
   '.term': [
     {
       'label': 'Copy'
-      'command': 'term2:copy'
+      'command': 'term3:copy'
     }
     {
       'label': 'Paste'
-      'command': 'term2:paste'
+      'command': 'term3:paste'
     }
   ]
 
   '.overlayer': [
     {
-      'label': 'Term2: Pipe selection to last Terminal session'
-      'command': 'term2:pipe-selection'
+      'label': 'Term3: Pipe selection to last Terminal session'
+      'command': 'term3:pipe-selection'
     }
     {
-      'label': 'Term2: Pipe file path to the Terminal session'
-      'command': 'term2:pipe-path'
+      'label': 'Term3: Pipe file path to the Terminal session'
+      'command': 'term3:pipe-path'
     }
   ]

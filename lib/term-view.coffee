@@ -28,7 +28,7 @@ class TermView extends View
     super
 
   @content: ->
-    @div class: 'term2'
+    @div class: 'term3'
 
   onData: (callback) ->
     @emitter.on 'data', callback
@@ -104,12 +104,12 @@ class TermView extends View
       processPath = require.resolve './pty'
       @ptyProcess = Task.once processPath, fs.absolute(atom.project.getPaths()[0] ? '~'), shellOverride, cols, rows, args
 
-      @ptyProcess.on 'term2:data', (data) =>
+      @ptyProcess.on 'term3:data', (data) =>
         utf8 = new Buffer(data, "base64").toString("utf-8")
         @term.write utf8
         @emitter.emit('data', data)
 
-      @ptyProcess.on 'term2:exit', (data) =>
+      @ptyProcess.on 'term3:exit', (data) =>
         @emitter.emit('exit', data)
         @exit()
 
@@ -175,8 +175,8 @@ class TermView extends View
     @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane_()
     @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane_()), 300
-    atom.commands.add "atom-workspace", "term2:paste", => @paste()
-    atom.commands.add "atom-workspace", "term2:copy", => @copy()
+    atom.commands.add "atom-workspace", "term3:paste", => @paste()
+    atom.commands.add "atom-workspace", "term3:copy", => @copy()
 
   copy: ->
     if  @term._selected  # term.js visual mode selections

@@ -21,10 +21,10 @@ module.exports = (ptyCwd, sh, cols, rows, args) ->
     env: process.env
 
   ptyProcess.on 'data', (data) ->
-    emit('term2:data', new Buffer(data).toString("base64"))
+    emit('term3:data', new Buffer(data).toString("base64"))
 
   ptyProcess.on 'exit', ->
-    emit('term2:exit')
+    emit('term3:exit')
     callback()
 
   process.on 'message', ({event, cols, rows, text}={}) ->
