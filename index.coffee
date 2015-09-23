@@ -4,7 +4,7 @@ ListView = require './lib/build/list-view'
 Terminals = require './lib/terminal-model'
 {Emitter}  = require 'event-kit'
 keypather  = do require 'keypather'
-
+{CompositeDisposable} = require 'event-kit'
 
 capitalize = (str)-> str[0].toUpperCase() + str[1..].toLowerCase()
 
@@ -208,8 +208,9 @@ module.exports =
       title: title,
       pane: pane
     }
+    subscriptions = new CompositeDisposable
 
-    disposable = pane.onDidChangeActiveItem ->
+    subscriptions.add pane.onDidChangeActiveItem ->
       activeItem = pane.getActiveItem()
       if activeItem != termView
         if termView.term
@@ -229,11 +230,11 @@ module.exports =
     id = model.id
     termView.id = id
 
-    termView.onExit () ->
+    subscriptions.add termView.onExit () ->
       Terminals.remove id
       disposable.dispose()
 
-    termView.onDidChangeTitle () ->
+    subscriptions.add termView.onDidChangeTitle () ->
       if forkPTY
         model.title = termView.getTitle()
       else
@@ -241,6 +242,11 @@ module.exports =
 
     item = pane.addItem termView
     pane.activateItem item
+    subscriptions.add pane.onWillRemoveItem (itemRemoved, index) ->
+      if itemRemoved.item == item
+        item.destroy()
+        Terminals.remove id
+        subscriptions.dispose()
     termView
 
   pipeTerm: (action) ->
