@@ -19,8 +19,7 @@ To install **Term3** easily into your Atom:
 ```console
 $ apm install term3
 ```
-
-![Vim, Emacs and HTop](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term3.png)
+![Term3 in action](https://raw.githubusercontent.com/Floobits/atom-term3/master/static/term3.png)
 
 ## Key Bindings and Events
 
