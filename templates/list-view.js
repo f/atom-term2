@@ -32,6 +32,9 @@ var ListView = React.createClass({
     }
   },
   render: function () {
+    if (!terminals.length) {
+      return <div/>;
+    }
     const terms = terminals.map(function (t) {
       return (<TerminalView terminal={t} key={t.id} />);
     });
