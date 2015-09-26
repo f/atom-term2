@@ -133,7 +133,7 @@ class TermView extends View
       console.error error
       return
 
-    @emitter.emit 'resize', cols, rows
+    @emitter.emit 'resize', {cols, rows}
 
   titleVars: ->
     bashName: last @opts.shell.split '/'
