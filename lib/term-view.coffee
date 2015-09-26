@@ -73,7 +73,6 @@ class TermView extends View
     }
 
     term.on "data", (data) =>
-      @emitter.emit 'stdout', data
       # let the remote term write to stdin - we slurp up its stdout
       if @ptyProcess
         @input data
@@ -107,7 +106,7 @@ class TermView extends View
       @ptyProcess.on 'term3:data', (data) =>
         utf8 = new Buffer(data, "base64").toString("utf-8")
         @term.write utf8
-        @emitter.emit('data', data)
+        @emitter.emit('stdout', utf8)
 
       @ptyProcess.on 'term3:exit', (data) =>
         @emitter.emit('exit', data)
