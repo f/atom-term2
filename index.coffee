@@ -166,6 +166,7 @@ module.exports =
     termView.on 'remove', @handleRemoveTerm.bind this
 
     @termViews.push? termView
+    process.nextTick () => @emitter.emit 'term', termView
     termView
 
   splitTerm: (direction) ->
@@ -198,6 +199,9 @@ module.exports =
         splitter()
     else
       splitter()
+
+  onTerm: (callback) ->
+    @emitter.on 'term', callback
 
   newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
     termView = @createTermView forkPTY, rows, cols
