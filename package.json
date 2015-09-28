@@ -9,7 +9,7 @@
     "atom": ">=0.121.0"
   },
   "dependencies": {
-    "atom-term.js": "0.0.56",
+    "atom-term.js": "https://github.com/Floobits/atom-term.js/archive/9c2e46a00b0593b06c59a17ce310b81b847ef0a5.tar.gz",
     "atom-space-pen-views": "^2.0.3",
     "debounce": "0.0.3",
     "fs-plus": "^2.2.3",
