@@ -9,9 +9,9 @@ _Term3 is a fork and rebuilt version of [Term2](http://atom.io/packages/term2) p
 
 ## Why is Term3 a thing ?!
 
-This fork fixes some bugs in upstream including the [isMac](https://github.com/f/atom-term.js/pull/4) bug.
+This fork fixes some bugs in upstream including [fixing the letter k](https://github.com/Floobits/atom-term3/issues/1).
 Term3 adds a terminal list above the treeview list.
-Term3 also adds an API for other plugins, like [Floobits](https://github.com/Floobits/floobits-atom), so you can pair on your terminals in addition to your code.
+Term3 also adds a [service API](http://blog.atom.io/2015/03/25/new-services-API.html) for other plugins, like [Floobits](https://github.com/Floobits/floobits-atom), so you can pair on your terminals in addition to your code.
 
 To install **Term3**
 
