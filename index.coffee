@@ -121,7 +121,7 @@ module.exports =
   emitter: new Emitter()
   config: config
 
-  activate: (@state)->
+  activate: (@state) ->
     ['up', 'right', 'down', 'left'].forEach (direction) =>
       atom.commands.add "atom-workspace", "term3:open-split-#{direction}", @splitTerm.bind(this, direction)
 
@@ -132,12 +132,70 @@ module.exports =
     atom.packages.activatePackage('tree-view').then (treeViewPkg) =>
       node = new ListView()
       treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
-      # @newTerm()
 
-  getTerminals: =>
+  service_0_1_0: () ->
+    {
+      getTerminals: @getTerminals.bind(this),
+      onTerm: @onTerm.bind(this),
+      newTerm: @newTerm.bind(this)
+    }
+
+  getTerminals: ->
     Terminals.map (t) ->
       t.term
 
+  onTerm: (callback) ->
+    @emitter.on 'term', callback
+
+  newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
+    termView = @createTermView forkPTY, rows, cols
+    pane = atom.workspace.getActivePane()
+    model = Terminals.add {
+      local: !!forkPTY,
+      term: termView,
+      title: title,
+      pane: pane
+    }
+
+    subscriptions = new CompositeDisposable
+
+    subscriptions.add pane.onDidChangeActiveItem ->
+      activeItem = pane.getActiveItem()
+      if activeItem != termView
+        if termView.term
+          termView.term.constructor._textarea = null
+        return
+
+      process.nextTick ->
+        termView.focus()
+        # HACK!
+        # so, term.js allows for a special _textarea because of iframe shenanigans,
+        # but, it is the constructor instead of the instance!!!1 - probably to avoid having to bind this as a premature
+        # optimization.
+        atomPane = activeItem.parentsUntil("atom-pane").parent()[0]
+        if termView.term
+          termView.term.constructor._textarea = atomPane
+
+    id = model.id
+    termView.id = id
+
+    subscriptions.add termView.onExit () ->
+      Terminals.remove id
+
+    subscriptions.add termView.onDidChangeTitle () ->
+      if forkPTY
+        model.title = termView.getTitle()
+      else
+        model.title = title + '-' + termView.getTitle()
+
+    item = pane.addItem termView
+    pane.activateItem item
+    subscriptions.add pane.onWillRemoveItem (itemRemoved, index) ->
+      if itemRemoved.item == item
+        item.destroy()
+        Terminals.remove id
+        subscriptions.dispose()
+    termView
 
   createTermView: (forkPTY=true, rows=30, cols=80) ->
     opts =
@@ -199,58 +257,6 @@ module.exports =
         splitter()
     else
       splitter()
-
-  onTerm: (callback) ->
-    @emitter.on 'term', callback
-
-  newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
-    termView = @createTermView forkPTY, rows, cols
-    pane = atom.workspace.getActivePane()
-    model = Terminals.add {
-      local: !!forkPTY,
-      term: termView,
-      title: title,
-      pane: pane
-    }
-    subscriptions = new CompositeDisposable
-
-    subscriptions.add pane.onDidChangeActiveItem ->
-      activeItem = pane.getActiveItem()
-      if activeItem != termView
-        if termView.term
-          termView.term.constructor._textarea = null
-        return
-
-      process.nextTick ->
-        termView.focus()
-        # HACK!
-        # so, term.js allows for a special _textarea because of iframe shenanigans,
-        # but, it is the constructor instead of the instance!!!1 - probably to avoid having to bind this as a premature
-        # optimization.
-        atomPane = activeItem.parentsUntil("atom-pane").parent()[0]
-        if termView.term
-          termView.term.constructor._textarea = atomPane
-
-    id = model.id
-    termView.id = id
-
-    subscriptions.add termView.onExit () ->
-      Terminals.remove id
-
-    subscriptions.add termView.onDidChangeTitle () ->
-      if forkPTY
-        model.title = termView.getTitle()
-      else
-        model.title = title + '-' + termView.getTitle()
-
-    item = pane.addItem termView
-    pane.activateItem item
-    subscriptions.add pane.onWillRemoveItem (itemRemoved, index) ->
-      if itemRemoved.item == item
-        item.destroy()
-        Terminals.remove id
-        subscriptions.dispose()
-    termView
 
   pipeTerm: (action) ->
     editor = @getActiveEditor()
