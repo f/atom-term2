@@ -6,7 +6,7 @@
 'menu': [
   'label': 'Packages'
   'submenu': [
-    'label': 'Term 2'
+    'label': 'Term 3'
     'submenu': [
       {'label': 'Open New Terminal in New Tab', 'command': 'term3:open'}
       {'label': 'Open New Terminal in Right Pane', 'command': 'term3:open-split-right'}
