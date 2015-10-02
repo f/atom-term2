@@ -178,6 +178,8 @@ class TermView extends View
     atom.commands.add "atom-workspace", "term3:copy", => @copy()
 
   copy: ->
+    return unless @term
+
     if @term._selected  # term.js visual mode selections
       textarea = @term.getCopyTextarea()
       text = @term.grabText(
