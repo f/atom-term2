@@ -1,9 +1,10 @@
-util       = require 'util'
-os         = require 'os'
-fs         = require 'fs-plus'
-path       = require 'path'
-debounce   = require 'debounce'
-Terminal   = require 'atom-term.js'
+util = require 'util'
+os = require 'os'
+fs = require 'fs-plus'
+path = require 'path'
+debounce = require 'debounce'
+Terminal = require 'atom-term.js'
+{CompositeDisposable} = require 'atom'
  # see https://github.com/f/atom-term.js/pull/5
  # see https://github.com/f/atom-term.js/pull/4
 window.isMac = window.navigator.userAgent.indexOf('Mac') != -1;
@@ -25,6 +26,7 @@ class TermView extends View
   constructor: (@opts={})->
     @emitter = new Emitter
     @fakeRow = $("<div><span>&nbsp;</span></div>").css visibility: 'hidden'
+    @disposable = new CompositeDisposable();
     super
 
   @content: ->
@@ -173,9 +175,9 @@ class TermView extends View
     @resizeToPane_ = @resizeToPane_.bind this
     @on 'focus', @focus
     $(window).on 'resize', => @resizeToPane_()
-    @disposable = atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane_()), 300
-    atom.commands.add "atom-workspace", "term3:paste", => @paste()
-    atom.commands.add "atom-workspace", "term3:copy", => @copy()
+    @disposable.add atom.workspace.getActivePane().observeFlexScale => setTimeout (=> @resizeToPane_()), 300
+    @disposable.add atom.commands.add "atom-workspace", "term3:paste", => @paste()
+    @disposable.add atom.commands.add "atom-workspace", "term3:copy", => @copy()
 
   copy: ->
     return unless @term
