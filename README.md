@@ -1,53 +1,46 @@
-# Atom Term 2
+# Atom Term 3
 
-Run shell sessions within Atom Editor using `term2` package.
+Run shell sessions within Atom Editor using `term3` package.
 Run **Vim, Emacs, Htop, etc.** in Atom.
 It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power
 of Atom Package environment.
 
-_It's a fork and rebuilt version of "[Term](http://atom.io/packages/term)" package._
+_Term3 is a fork and rebuilt version of [Term2](http://atom.io/packages/term2) package which was a fork of [Term](http://atom.io/packages/term) package._
 
-## What about this fork ?!
+## Why is Term3 a thing ?!
 
-This fork adds a 'ShellOverride' configuration option which allows to override
-the shell Term2 is using (your default shell).
+This fork fixes some bugs in upstream including [fixing the letter k](https://github.com/Floobits/atom-term3/issues/1).
+Term3 adds a terminal list above the treeview list.
+Term3 also adds a [service API](http://blog.atom.io/2015/03/25/new-services-API.html) for other plugins, like [Floobits](https://github.com/Floobits/floobits-atom), so you can pair on your terminals in addition to your code.
 
-If your default shell is zsh you see that it's not yet fully compatible with
-Term2 (scrolling might not work):
-setting ShellOverride to i.e. 'bash' let you use Term2 with another (working)
-shell without messing up with your default shell configuration.
-
-The fork was focused on this option in the first place but evolved a lot since.
-
-To install **Term2** easily into your Atom:
+To install **Term3**
 
 ```console
-$ apm install term2
+$ apm install term3
 ```
-
-![Vim, Emacs and HTop](https://dl.dropboxusercontent.com/u/20947008/webbox/atom/atom-term3.png)
+![Term3 in action](https://raw.githubusercontent.com/Floobits/atom-term3/master/static/term3.png)
 
 ## Key Bindings and Events
 
 | key binding | event | action |
 | ----------- | ----- | ------ |
-| `ctrl + alt + t` | `term2:open` | Opens new terminal tab pane |
-| `ctrl + alt + up`| `term2:open-split-up` | Opens new terminal tab pane in up split |
-| `ctrl + alt + right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
-| `ctrl + alt + down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
-| `ctrl + alt + left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
-| `ctrl + k, t, t` | `term2:open` | Opens new terminal tab pane |
-| `ctrl + k, t, up`| `term2:open-split-up` | Opens new terminal tab pane in up split |
-| `ctrl + k, t, right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
-| `ctrl + k, t, down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
-| `ctrl + k, t, left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
-| `cmd + k, t, t` | `term2:open` | Opens new terminal tab pane |
-| `cmd + k, t, up`| `term2:open-split-up` | Opens new terminal tab pane in up split |
-| `cmd + k, t, right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
-| `cmd + k, t, down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
-| `cmd + k, t, left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
-| `ctrl + insert | `term2:copy` | Copy text (if `ctrl + c` is not working) |
-| `shift + insert | `term2:paste` | Paste text (if `ctrl + v` is not working) |
+| `ctrl + alt + t` | `term3:open` | Opens new terminal tab pane |
+| `ctrl + alt + up`| `term3:open-split-up` | Opens new terminal tab pane in up split |
+| `ctrl + alt + right`| `term3:open-split-right` | Opens new terminal tab pane in right split |
+| `ctrl + alt + down`| `term3:open-split-down` | Opens new terminal tab pane in down split |
+| `ctrl + alt + left`| `term3:open-split-left` | Opens new terminal tab pane in left split |
+| `ctrl + k, t, t` | `term3:open` | Opens new terminal tab pane |
+| `ctrl + k, t, up`| `term3:open-split-up` | Opens new terminal tab pane in up split |
+| `ctrl + k, t, right`| `term3:open-split-right` | Opens new terminal tab pane in right split |
+| `ctrl + k, t, down`| `term3:open-split-down` | Opens new terminal tab pane in down split |
+| `ctrl + k, t, left`| `term3:open-split-left` | Opens new terminal tab pane in left split |
+| `cmd + k, t, t` | `term3:open` | Opens new terminal tab pane |
+| `cmd + k, t, up`| `term3:open-split-up` | Opens new terminal tab pane in up split |
+| `cmd + k, t, right`| `term3:open-split-right` | Opens new terminal tab pane in right split |
+| `cmd + k, t, down`| `term3:open-split-down` | Opens new terminal tab pane in down split |
+| `cmd + k, t, left`| `term3:open-split-left` | Opens new terminal tab pane in left split |
+| `ctrl + insert | `term3:copy` | Copy text (if `ctrl + c` is not working) |
+| `shift + insert | `term3:paste` | Paste text (if `ctrl + v` is not working) |
 
 ## Customize Title
 
@@ -85,7 +78,7 @@ Currently, you will need to adjust the colors in `config.cson`
 You can add something like (please note the 2 examples of color format):
 
 ```cson
-term2:
+term3:
   colors:
     normalBlack: #000
     normalRed:
@@ -120,12 +113,12 @@ The background is transparent so you benefit of Atom app background color._
 
 ### Why some commands do not work like in my previous terminal ?
 
-It's [a known `$PATH` issue](https://github.com/webBoxio/atom-term2/issues/50).
+It's [a known `$PATH` issue](https://github.com/floobits/atom-term3/issues/50).
 You are probably an OS X user (if not, let us know).
 GUI app doesn't get `/etc/paths` (and might come from `/usr/local/bin`).
 There is some workaround for OS X 10.9-, but OS X 10.10+ doesn't execute
 `/etc/launchd.conf` anymore.
-So, in order to get the right PATH in atom-term2 context, you have this
+So, in order to get the right PATH in atom-term3 context, you have this
 solutions:
 
 - In your `.(bash|zsh|*)rc`, add
@@ -140,12 +133,12 @@ solutions:
 editing your Atom config:
 
   ```cson
-  term2:
+  term3:
     autoRunCommand: 'login -f `whoami`'
   ```
 
 ---
 
-## [Contributors](https://github.com/webBoxio/atom-term2/graphs/contributors)
+## [Contributors](https://github.com/floobits/atom-term3/graphs/contributors)
 
 ## [License](LICENSE)

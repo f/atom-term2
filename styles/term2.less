@@ -2,12 +2,15 @@
 //
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
-@import "ui-variables";
 
-.term2 {
+@import "ui-variables";
+// @import "tree-view";
+
+.term3 {
+  overflow: hidden;
   .terminal {
     padding: 0;
-
+    overflow: auto;
     > div {
       white-space: pre;
       > span {
@@ -25,5 +28,30 @@
     span {
       white-space: pre;
     }
+  }
+}
+
+.floobits-terminal {
+  padding: 8px;
+  font-family: Menlo, "Deja Vu Sans Mono", Consolas, monospace;
+  div {
+    white-space: nowrap;
+  }
+}
+
+terminal-list-view {
+  display: flex;
+  margin-top: 10px;
+  .header {
+    img {
+      width: 22px;
+      padding-right: 5px;
+    }
+    margin-left: 21px;
+  }
+  ul {
+    margin-left: -24px;
+    list-style-type: none;
+    margin-top: 5px;
   }
 }

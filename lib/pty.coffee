@@ -2,7 +2,7 @@
 
 pty = require 'pty.js'
 
-module.exports = (ptyCwd, sh, args) ->
+module.exports = (ptyCwd, sh, cols, rows, args) ->
   callback = @async()
   if sh
       shell = sh
@@ -13,9 +13,6 @@ module.exports = (ptyCwd, sh, args) ->
       else
         shell = process.env.SHELL
 
-  cols = 80
-  rows = 30
-
   ptyProcess = pty.fork shell, args,
     name: 'xterm-256color'
     cols: cols
@@ -23,12 +20,14 @@ module.exports = (ptyCwd, sh, args) ->
     cwd: ptyCwd
     env: process.env
 
-  ptyProcess.on 'data', (data) -> emit('term2:data', data)
+  ptyProcess.on 'data', (data) ->
+    emit('term3:data', new Buffer(data).toString("base64"))
+
   ptyProcess.on 'exit', ->
-    emit('term2:exit')
+    emit('term3:exit')
     callback()
 
   process.on 'message', ({event, cols, rows, text}={}) ->
     switch event
       when 'resize' then ptyProcess.resize(cols, rows)
-      when 'input' then ptyProcess.write(text)
+      when 'input' then ptyProcess.write(new Buffer(text, "base64").toString("utf-8"))
