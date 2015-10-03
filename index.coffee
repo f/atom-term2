@@ -136,7 +136,7 @@ module.exports =
       node = new ListView()
       treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
 
-  service_0_1_0: () ->
+  service_0_1_1: () ->
     {
       getTerminals: @getTerminals.bind(this),
       onTerm: @onTerm.bind(this),

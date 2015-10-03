@@ -29,6 +29,9 @@ class TermView extends View
     @disposable = new CompositeDisposable();
     super
 
+  getForked: () ->
+    return @opts.forkPTY
+
   @content: ->
     @div class: 'term3'
 
