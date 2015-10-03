@@ -120,14 +120,17 @@ module.exports =
   focusedTerminal: off
   emitter: new Emitter()
   config: config
+  disposables: null
 
   activate: (@state) ->
-    ['up', 'right', 'down', 'left'].forEach (direction) =>
-      atom.commands.add "atom-workspace", "term3:open-split-#{direction}", @splitTerm.bind(this, direction)
+    @disposables = new CompositeDisposable()
 
-    atom.commands.add "atom-workspace", "term3:open", @newTerm.bind(this)
-    atom.commands.add "atom-workspace", "term3:pipe-path", @pipeTerm.bind(this, 'path')
-    atom.commands.add "atom-workspace", "term3:pipe-selection", @pipeTerm.bind(this, 'selection')
+    ['up', 'right', 'down', 'left'].forEach (direction) =>
+      @disposables.add atom.commands.add "atom-workspace", "term3:open-split-#{direction}", @splitTerm.bind(this, direction)
+
+    @disposables.add atom.commands.add "atom-workspace", "term3:open", @newTerm.bind(this)
+    @disposables.add atom.commands.add "atom-workspace", "term3:pipe-path", @pipeTerm.bind(this, 'path')
+    @disposables.add atom.commands.add "atom-workspace", "term3:pipe-selection", @pipeTerm.bind(this, 'selection')
 
     atom.packages.activatePackage('tree-view').then (treeViewPkg) =>
       node = new ListView()
@@ -190,11 +193,13 @@ module.exports =
 
     item = pane.addItem termView
     pane.activateItem item
-    subscriptions.add pane.onWillRemoveItem (itemRemoved, index) ->
+    subscriptions.add pane.onWillRemoveItem (itemRemoved, index) =>
       if itemRemoved.item == item
         item.destroy()
         Terminals.remove id
+        @disposables.remove subscriptions
         subscriptions.dispose()
+    @disposables.add subscriptions
     termView
 
   createTermView: (forkPTY=true, rows=30, cols=80) ->
@@ -280,7 +285,9 @@ module.exports =
     @termViews.splice @termViews.indexOf(termView), 1
 
   deactivate:->
-    @termViews.forEach (view) -> view.deactivate()
+    @termViews.forEach (view) -> view.exit()
+    @termViews = []
+    @disposables.dispose
 
   serialize:->
     termViewsState = this.termViews.map (view)-> view.serialize()
