@@ -51,6 +51,7 @@ class TermView extends View
     @emitter.on 'stdout', callback
 
   input: (data) ->
+    return unless @term
     try
       if @ptyProcess
         base64ed = new Buffer(data).toString("base64")
