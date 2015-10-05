@@ -46,8 +46,8 @@ $ apm install term2
 | `cmd + k, t, right`| `term2:open-split-right` | Opens new terminal tab pane in right split |
 | `cmd + k, t, down`| `term2:open-split-down` | Opens new terminal tab pane in down split |
 | `cmd + k, t, left`| `term2:open-split-left` | Opens new terminal tab pane in left split |
-| `ctrl + insert | `term2:copy` | Copy text (if `ctrl + c` is not working) |
-| `shift + insert | `term2:paste` | Paste text (if `ctrl + v` is not working) |
+| `ctrl + insert` | `term2:copy` | Copy text (if `ctrl + c` is not working) |
+| `shift + insert` | `term2:paste` | Paste text (if `ctrl + v` is not working) |
 
 ## Customize Title
 
