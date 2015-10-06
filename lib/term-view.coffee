@@ -114,8 +114,7 @@ class TermView extends View
         @term.write utf8
         @emitter.emit('stdout', utf8)
 
-      @ptyProcess.on 'term3:exit', (data) =>
-        @emitter.emit('exit', data)
+      @ptyProcess.on 'term3:exit', () =>
         @exit()
 
 
@@ -238,14 +237,16 @@ class TermView extends View
     pane.destroyItem(this);
 
   destroy: ->
-    @off 'focus', @focus
-    $(window).off 'resize', @resizeToPane_
     if @ptyProcess
       @ptyProcess.terminate()
       @ptyProcess = null
+    # we always have a @term
     if @term
+      @emitter.emit('exit')
       @term.destroy()
       @term = null
+      @off 'focus', @focus
+      $(window).off 'resize', @resizeToPane_
     if @disposable
       @disposable.dispose()
       @disposable = null
