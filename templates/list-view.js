@@ -22,15 +22,6 @@ var TerminalView = React.createClass({
 
 var ListView = React.createClass({
   mixins: [flux.createAutoBinder([], [terminals])],
-  openTerm: function (id) {
-    if (id in this.openTerminals) {
-      var pane = this.openTerminals[id];
-      var view = pane.getView()[0];
-      pane.activePane.activateItem(pane);
-      view.focus();
-      return;
-    }
-  },
   render: function () {
     if (!terminals.length) {
       return <div/>;
