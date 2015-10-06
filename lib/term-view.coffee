@@ -122,7 +122,7 @@ class TermView extends View
     term.focus()
     @applyStyle()
     @attachEvents()
-    @resizeToPane_
+    @resizeToPane_()
 
   resize: (cols, rows) ->
     return unless @term
