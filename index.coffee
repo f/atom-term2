@@ -136,11 +136,11 @@ module.exports =
       node = new ListView()
       treeViewPkg.mainModule.treeView.find(".tree-view-scroller").prepend node
 
-  service_0_1_1: () ->
+  service_0_1_3: () ->
     {
       getTerminals: @getTerminals.bind(this),
       onTerm: @onTerm.bind(this),
-      newTerm: @newTerm.bind(this)
+      newTerm: @newTerm.bind(this),
     }
 
   getTerminals: ->
@@ -157,8 +157,8 @@ module.exports =
       local: !!forkPTY,
       term: termView,
       title: title,
-      pane: pane
     }
+
 
     subscriptions = new CompositeDisposable
 

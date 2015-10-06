@@ -29,6 +29,14 @@ class TermView extends View
     @disposable = new CompositeDisposable();
     super
 
+  focusPane: () ->
+    pane = atom.workspace.getActivePane()
+    items = pane.getItems()
+    index = items.indexOf(this)
+    return unless index != -1
+    pane.activateItemAtIndex(index)
+    focus()
+
   getForked: () ->
     return @opts.forkPTY
 
