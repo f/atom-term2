@@ -26,7 +26,6 @@ class TermView extends View
   constructor: (@opts={})->
     @emitter = new Emitter
     @fakeRow = $("<div><span>&nbsp;</span></div>").css visibility: 'hidden'
-    @disposable = new CompositeDisposable();
     super
 
   focusPane: () ->
@@ -72,6 +71,8 @@ class TermView extends View
     @focusTerm()
 
   attached: () ->
+    @disposable = new CompositeDisposable();
+
     {cols, rows, cwd, shell, shellArguments, shellOverride, runCommand, colors, cursorBlink, scrollback} = @opts
     args = shellArguments.split(/\s+/g).filter (arg) -> arg
 
