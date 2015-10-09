@@ -143,19 +143,12 @@ module.exports =
     splitTerm: (direction)->
       openPanesInSameSplit = atom.config.get 'term2.openPanesInSameSplit'
       termView = @createTermView()
-      termView.on "click", =>
-
-        # get focus in the terminal
-        # avoid double click to get focus
-        termView.term.element.focus()
-        termView.term.focus()
-
-        @focusedTerminal = termView
       direction = capitalize direction
 
       splitter = =>
         pane = activePane["split#{direction}"] items: [termView]
         activePane.termSplits[direction] = pane
+        @attachFocusEvents pane, pane.items[0], termView
         @focusedTerminal = [pane, pane.items[0]]
 
       activePane = atom.workspace.getActivePane()
@@ -164,6 +157,7 @@ module.exports =
         if activePane.termSplits[direction] and activePane.termSplits[direction].items.length > 0
           pane = activePane.termSplits[direction]
           item = pane.addItem termView
+          @attachFocusEvents pane, item, termView
           pane.activateItem item
           @focusedTerminal = [pane, item]
         else
@@ -175,6 +169,7 @@ module.exports =
       termView = @createTermView()
       pane = atom.workspace.getActivePane()
       item = pane.addItem termView
+      @attachFocusEvents pane, item, termView
       pane.activateItem item
 
     pipeTerm: (action)->
@@ -204,3 +199,13 @@ module.exports =
     serialize:->
       termViewsState = this.termViews.map (view)-> view.serialize()
       {termViews: termViewsState}
+
+    attachFocusEvents: (pane, item, termView)->
+      pane.onDidActivate =>
+        if pane.getActiveItem() == item
+          @focusedTerminal = termView
+          termView.focus()
+      pane.onDidChangeActiveItem (activeItem)=>
+        if activeItem == item
+          @focusedTerminal = termView
+          termView.focus()
