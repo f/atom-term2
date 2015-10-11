@@ -39,8 +39,8 @@ $ apm install term3
 | `cmd + k, t, right`| `term3:open-split-right` | Opens new terminal tab pane in right split |
 | `cmd + k, t, down`| `term3:open-split-down` | Opens new terminal tab pane in down split |
 | `cmd + k, t, left`| `term3:open-split-left` | Opens new terminal tab pane in left split |
-| `ctrl + insert | `term3:copy` | Copy text (if `ctrl + c` is not working) |
-| `shift + insert | `term3:paste` | Paste text (if `ctrl + v` is not working) |
+| `ctrl + insert` | `term3:copy` | Copy text (if `ctrl + c` is not working) |
+| `shift + insert` | `term3:paste` | Paste text (if `ctrl + v` is not working) |
 
 ## Customize Title
 
