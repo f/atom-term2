@@ -111,6 +111,16 @@ class TermView extends View
       @opts.fontSize or
       atom.config.get('editor.fontSize')
     ) + "px"
+    # Insert style for cursor.
+    [..., bg, fg] = @opts.colors.map (color) -> color.toHexString()
+    cursorStyleElement = $(
+      "<style>
+      .terminal-cursor {
+        background-color: #{fg};
+        color: #{bg};
+      }
+      </style>")
+    $(@term.element).prepend cursorStyleElement
 
   attachEvents: ->
     @resizeToPane = @resizeToPane.bind this
