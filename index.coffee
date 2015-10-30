@@ -108,7 +108,7 @@ config =
     default: do ({SHELL, HOME}=process.env) ->
       switch path.basename SHELL.toLowerCase()
         when 'bash' then "--init-file #{path.join HOME, '.bash_profile'}"
-        when 'zsh'  then ""
+        when 'zsh'  then "-l"
         else ''
   openPanesInSameSplit:
     type: 'boolean'
