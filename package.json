@@ -1,7 +1,7 @@
 {
   "name": "term3",
   "main": "./index",
-  "version": "0.19.1",
+  "version": "0.19.2",
   "description": "A terminal emulator for Atom. You can run shell sessions, Vim, Emacs, htop, etc.",
   "repository": "https://github.com/Floobits/atom-term3",
   "license": "MIT",
