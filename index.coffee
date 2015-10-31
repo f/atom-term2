@@ -125,6 +125,9 @@ module.exports =
   activate: (@state) ->
     @disposables = new CompositeDisposable()
 
+    unless process.env.LANG
+      console.warn "Term3: LANG environment variable is not set. Fancy characters (å, ñ, ó, etc`) may be corrupted. The only work-around is to quit Atom and run `atom` from your shell."
+
     ['up', 'right', 'down', 'left'].forEach (direction) =>
       @disposables.add atom.commands.add "atom-workspace", "term3:open-split-#{direction}", @splitTerm.bind(this, direction)
 
