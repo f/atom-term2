@@ -119,6 +119,7 @@ class TermView extends View
       @ptyProcess = Task.once processPath, fs.absolute(atom.project.getPaths()[0] ? '~'), shellOverride, cols, rows, args
 
       @ptyProcess.on 'term3:data', (data) =>
+        return unless @term
         utf8 = new Buffer(data, "base64").toString("utf-8")
         @term.write utf8
         @emitter.emit('stdout', utf8)
