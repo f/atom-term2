@@ -170,7 +170,7 @@ class TermView extends View
 
   applyStyle: ->
     # remove background color in favor of the atom background
-    @term.element.style.background = null
+    # @term.element.style.background = null
     @term.element.style.fontFamily = (
       @opts.fontFamily or
       atom.config.get('editor.fontFamily') or
