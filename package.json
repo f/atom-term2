@@ -11,12 +11,12 @@
   "dependencies": {
     "atom-term.js": "https://github.com/Floobits/atom-term.js/archive/0d1fa6705822ccc6689c4893a8e1c27793d8b9a6.tar.gz",
     "atom-space-pen-views": "^2.0.3",
-    "debounce": "0.0.3",
+    "debounce": "1.0.x",
     "fs-plus": "^2.2.3",
     "keypather": "^1.3.2",
-    "flukes": "0.1.3",
+    "flukes": "0.1.x",
     "pty.js": "0.3.x",
-    "event-kit": "1.3.x",
+    "event-kit": "1.5.x",
     "react-atom-fork": "0.11.x",
     "react-tools": "0.11.x",
     "reactionary-atom-fork": "1.x"
