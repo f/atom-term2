@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "npm run install",
-    "lint": "eslint lib",
+    "lint": "eslint lib templates",
     "watch": "jsx --watch --harmony templates lib/build",
     "install": "jsx --harmony templates lib/build"
   },

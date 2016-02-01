@@ -1,0 +1,18 @@
+{
+  "extends": "eslint-config-floobits",
+  "globals": {
+    "atom": false,
+    "document": false,
+    "MediaStreamTrack": false,
+    "window": false
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "consistent-this": [1, "that"]
+  },
+  "settings": {
+    "jsx": true
+  }
+}

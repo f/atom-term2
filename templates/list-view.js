@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global HTMLElement */
 "use strict";
 
 var React = require("react-atom-fork");
@@ -6,7 +7,7 @@ var flux = require("flukes");
 var terminals = require("../terminal-model");
 
 var TerminalView = React.createClass({
-  onMouseDown: function (e) {
+  onMouseDown: function () {
     this.props.terminal.open();
   },
   render: function () {
