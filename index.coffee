@@ -267,7 +267,9 @@ module.exports =
       splitter()
 
   pipeTerm: (action) ->
-    editor = @getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
+    if !editor
+      return
     stream = switch action
       when 'path'
         editor.getBuffer().file.path
