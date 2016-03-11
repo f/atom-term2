@@ -7,6 +7,9 @@ var flux = require("flukes");
 var terminals = require("../terminal-model");
 
 var TerminalView = React.createClass({
+  propTypes: {
+    terminal: React.PropTypes.instanceOf(terminals),
+  },
   onMouseDown: function () {
     this.props.terminal.open();
   },

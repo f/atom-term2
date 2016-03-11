@@ -1,18 +1,25 @@
 {
-  "extends": "eslint-config-floobits",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint-config-floobits", "plugin:react/recommended"],
   "globals": {
     "atom": false,
     "document": false,
-    "MediaStreamTrack": false,
     "window": false
   },
   "plugins": [
     "react"
   ],
   "rules": {
-    "consistent-this": [1, "that"]
+    "consistent-this": [1, "that"],
+    "react/no-deprecated": [1],
+    "react/no-is-mounted": [1],
   },
   "settings": {
+    "ecmascript": 6,
     "jsx": true
   }
 }

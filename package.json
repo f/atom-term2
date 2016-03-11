@@ -22,9 +22,9 @@
     "reactionary-atom-fork": "1.x"
   },
   "devDependencies": {
-    "eslint": "1.x",
+    "eslint": "2.x",
     "eslint-config-floobits": "*",
-    "eslint-plugin-react": "3.x"
+    "eslint-plugin-react": "4.x"
   },
   "scripts": {
     "build": "npm run install",
