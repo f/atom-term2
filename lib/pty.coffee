@@ -7,11 +7,14 @@ module.exports = (ptyCwd, sh, cols, rows, args) ->
   if sh
       shell = sh
   else
-      if process.platform is 'win32'
+      shell = process.env.SHELL
+      if not shell
+        # Try to salvage some sort of shell to execute. Horrible code below.
         path = require 'path'
-        shell = path.resolve(process.env.SystemRoot, 'WindowsPowerShell', 'v1.0', 'powershell.exe')
-      else
-        shell = process.env.SHELL
+        if process.platform is 'win32'
+          shell = path.resolve(process.env.SystemRoot, 'WindowsPowerShell', 'v1.0', 'powershell.exe')
+        else
+          shell = '/bin/sh'
 
   ptyProcess = pty.fork shell, args,
     name: 'xterm-256color'
