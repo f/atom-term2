@@ -1,6 +1,6 @@
 # from atom/terminal to reduce cpu usage
 
-pty = require 'pty.js'
+pty = require 'ptyw.js'
 
 module.exports = (ptyCwd, sh, cols, rows, args) ->
   callback = @async()
