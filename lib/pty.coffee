@@ -12,7 +12,7 @@ module.exports = (ptyCwd, sh, cols, rows, args) ->
         # Try to salvage some sort of shell to execute. Horrible code below.
         path = require 'path'
         if process.platform is 'win32'
-          shell = path.resolve(process.env.SystemRoot, 'WindowsPowerShell', 'v1.0', 'powershell.exe')
+          shell = path.resolve(process.env.SystemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe')
         else
           shell = '/bin/sh'
 
