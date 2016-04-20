@@ -138,7 +138,7 @@ class TermView extends View
     return unless @term
     return if @term.rows is rows and @term.cols is cols
     return unless cols > 0 and rows > 0 and isFinite(cols) and isFinite(rows)
-    console.log @term.rows, @term.cols, "->", rows, cols
+    # console.log @term.rows, @term.cols, "->", rows, cols
     try
       if @ptyProcess
         @ptyProcess.send {event: 'resize', rows, cols}
