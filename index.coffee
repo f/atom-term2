@@ -153,25 +153,10 @@ module.exports =
   onTerm: (callback) ->
     @emitter.on 'term', callback
 
-  newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
-    termView = @createTermView forkPTY, rows, cols
-    pane = atom.workspace.getActivePane()
-    model = Terminals.add {
-      local: !!forkPTY,
-      term: termView,
-      title: title,
-    }
-
-
+  attachSubscriptions: (termView, item, pane) ->
     subscriptions = new CompositeDisposable
 
-    subscriptions.add pane.onDidChangeActiveItem ->
-      activeItem = pane.getActiveItem()
-      if activeItem != termView
-        if termView.term
-          termView.term.constructor._textarea = null
-        return
-
+    focusNextTick = (activeItem) ->
       process.nextTick ->
         termView.focus()
         # HACK!
@@ -182,30 +167,42 @@ module.exports =
         if termView.term
           termView.term.constructor._textarea = atomPane
 
-    id = model.id
-    termView.id = id
+    subscriptions.add pane.onDidActivate ->
+      activeItem = pane.getActiveItem()
+      if activeItem != item
+        return
+      @focusedTerminal = termView
+      termView.focus()
+      focusNextTick activeItem
+
+    subscriptions.add pane.onDidChangeActiveItem (activeItem) ->
+      if activeItem != termView
+        if termView.term
+          termView.term.constructor._textarea = null
+        return
+      focusNextTick activeItem
 
     subscriptions.add termView.onExit () ->
-      Terminals.remove id
+      Terminals.remove termView.id
 
-    subscriptions.add termView.onDidChangeTitle () ->
-      if forkPTY
-        model.title = termView.getTitle()
-      else
-        model.title = title + '-' + termView.getTitle()
-
-    item = pane.addItem termView
-    pane.activateItem item
     subscriptions.add pane.onWillRemoveItem (itemRemoved, index) =>
       if itemRemoved.item == item
         item.destroy()
-        Terminals.remove id
+        Terminals.remove termView.id
         @disposables.remove subscriptions
         subscriptions.dispose()
-    @disposables.add subscriptions
+
+    subscriptions
+
+  newTerm: (forkPTY=true, rows=30, cols=80, title='tty') ->
+    termView = @createTermView forkPTY, rows, cols, title
+    pane = atom.workspace.getActivePane()
+    item = pane.addItem termView
+    @disposables.add @attachSubscriptions(termView, item, pane)
+    pane.activateItem item
     termView
 
-  createTermView: (forkPTY=true, rows=30, cols=80) ->
+  createTermView: (forkPTY=true, rows=30, cols=80, title='tty') ->
     opts =
       runCommand    : atom.config.get 'term3.autoRunCommand'
       shellOverride : atom.config.get 'term3.shellOverride'
@@ -229,7 +226,28 @@ module.exports =
     opts.cwd = opts.cwd or atom.project.getPaths()[0] or editorPath or process.env.HOME
 
     termView = new TermView opts
+    model = Terminals.add {
+      local: !!forkPTY,
+      term: termView,
+      title: title,
+    }
+    id = model.id
+    termView.id = id
+
     termView.on 'remove', @handleRemoveTerm.bind this
+    termView.on 'click', =>
+      # get focus in the terminal
+      # avoid double click to get focus
+      termView.term.element.focus()
+      termView.term.focus()
+
+      @focusedTerminal = termView
+
+    termView.onDidChangeTitle () ->
+      if forkPTY
+        model.title = termView.getTitle()
+      else
+        model.title = title + '-' + termView.getTitle()
 
     @termViews.push? termView
     process.nextTick () => @emitter.emit 'term', termView
@@ -238,20 +256,13 @@ module.exports =
   splitTerm: (direction) ->
     openPanesInSameSplit = atom.config.get 'term3.openPanesInSameSplit'
     termView = @createTermView()
-    termView.on "click", =>
-
-      # get focus in the terminal
-      # avoid double click to get focus
-      termView.term.element.focus()
-      termView.term.focus()
-
-      @focusedTerminal = termView
     direction = capitalize direction
 
     splitter = =>
       pane = activePane["split#{direction}"] items: [termView]
       activePane.termSplits[direction] = pane
       @focusedTerminal = [pane, pane.items[0]]
+      @disposables.add @attachSubscriptions(termView, pane.items[0], pane)
 
     activePane = atom.workspace.getActivePane()
     activePane.termSplits or= {}
@@ -261,6 +272,7 @@ module.exports =
         item = pane.addItem termView
         pane.activateItem item
         @focusedTerminal = [pane, item]
+        @disposables.add @attachSubscriptions(termView, item, pane)
       else
         splitter()
     else
