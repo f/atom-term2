@@ -156,19 +156,7 @@ module.exports =
   attachSubscriptions: (termView, item, pane) ->
     subscriptions = new CompositeDisposable
 
-    subscriptions.add pane.onDidActivate ->
-      console.log "DID ACTIVATE"
-      if pane.getActiveItem() == item
-        @focusedTerminal = termView
-        termView.focus()
-
-    subscriptions.add pane.onDidChangeActiveItem (activeItem) ->
-      console.log "DID CHANGE ACTIVE ITEM", activeItem
-      if activeItem != termView
-        if termView.term
-          termView.term.constructor._textarea = null
-        return
-
+    focusNextTick = (activeItem) ->
       process.nextTick ->
         termView.focus()
         # HACK!
@@ -178,6 +166,21 @@ module.exports =
         atomPane = activeItem.parentsUntil("atom-pane").parent()[0]
         if termView.term
           termView.term.constructor._textarea = atomPane
+
+    subscriptions.add pane.onDidActivate ->
+      activeItem = pane.getActiveItem()
+      if activeItem != item
+        return
+      @focusedTerminal = termView
+      termView.focus()
+      focusNextTick activeItem
+
+    subscriptions.add pane.onDidChangeActiveItem (activeItem) ->
+      if activeItem != termView
+        if termView.term
+          termView.term.constructor._textarea = null
+        return
+      focusNextTick activeItem
 
     subscriptions.add termView.onExit () ->
       Terminals.remove termView.id
