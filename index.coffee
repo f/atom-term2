@@ -259,7 +259,7 @@ module.exports =
       pane = activePane["split#{direction}"] items: [termView]
       activePane.termSplits[direction] = pane
       @focusedTerminal = [pane, pane.items[0]]
-      @disposables.add @attachSubscriptions(termView, @focusedTerminal, pane)
+      @disposables.add @attachSubscriptions(termView, pane.items[0], pane)
 
     activePane = atom.workspace.getActivePane()
     activePane.termSplits or= {}
