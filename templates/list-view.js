@@ -27,6 +27,10 @@ var TerminalView = React.createClass({
 var ListView = React.createClass({
   mixins: [flux.createAutoBinder([], [terminals])],
   render: function () {
+    // XXXX: Horrible hack to work around a bug in Atom. Sometimes, Atom will erase NODE_ENV when run from the command line
+    if (!process.env.NODE_ENV) {
+      process.env.NODE_ENV = "production";
+    }
     if (!terminals.length) {
       return (<div></div>);
     }
