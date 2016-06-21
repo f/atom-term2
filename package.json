@@ -15,7 +15,7 @@
     "fs-plus": "^2.2.3",
     "keypather": "^1.3.2",
     "flukes": "0.1.x",
-    "ptyw.js": "0.3.x",
+    "ptyw.js": "0.4.x",
     "event-kit": "1.5.x",
     "react-atom-fork": "0.11.x",
     "react-tools": "0.11.x",
