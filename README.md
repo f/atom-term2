@@ -80,7 +80,7 @@ You can add something like (please note the 2 examples of color format):
 ```cson
 term3:
   colors:
-    normalBlack: #000
+    normalBlack: '#000'
     normalRed:
       red: 255
       blue: 0
