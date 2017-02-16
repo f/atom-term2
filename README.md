@@ -1,5 +1,7 @@
 # Atom Term 2
 
+## ☢️ THIS PROJECT IS NO LONGER MAINTAINED. USE [TERM3](http://atom.io/packages/term) ☢️
+
 Run shell sessions within Atom Editor using `term2` package.
 Run **Vim, Emacs, Htop, etc.** in Atom.
 It's based on `pty.js` as shell spawner, and `term.js` as xterm, with the power
