@@ -87,6 +87,7 @@ class TermView extends View
     hostName: os.hostname()
     platform: process.platform
     home    : process.env.HOME
+    cwd     : @opts.cwd
 
   getTitle: ->
     @vars = @titleVars()
