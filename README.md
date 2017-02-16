@@ -1,6 +1,6 @@
 # Atom Term 2
 
-## ☢️ THIS PROJECT IS NO LONGER MAINTAINED. USE [TERM3](http://atom.io/packages/term) ☢️
+## ☢️ THIS PROJECT IS NO LONGER MAINTAINED. USE [TERM3](http://atom.io/packages/term3) ☢️
 
 Run shell sessions within Atom Editor using `term2` package.
 Run **Vim, Emacs, Htop, etc.** in Atom.
